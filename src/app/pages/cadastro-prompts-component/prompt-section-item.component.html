@@ -1,0 +1,106 @@
+<div [ngClass]="getPadding()" class="py-2 relative">
+  <div class="flex items-center justify-between p-3 rounded-lg border border-gray-200 transition duration-150"
+    [ngClass]="{'bg-gray-50': !isTheme, 'bg-white': isTheme, 'border-2 border-[#19AA79]': section.isEditingName}">
+    <div class="flex items-center grow">
+      <button (click)="toggleExpand()" class="mr-2 text-gray-600 hover:text-gray-800 transition">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transform transition-transform"
+          [ngClass]="{'rotate-180': section.isExpanded}" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd"
+            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+            clip-rule="evenodd" />
+        </svg>
+      </button>
+
+      @if (section.isEditingName) {
+      <div class="flex items-center w-full">
+        <input type="text" [(ngModel)]="section.name" placeholder="Informe o nome da seção"
+          class="grow p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#19AA79] focus:border-[#19AA79]" />
+        <button (click)="onSaveName()" class="ml-2 text-green-500 hover:text-green-700 transition">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd"
+              d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+              clip-rule="evenodd" />
+          </svg>
+        </button>
+        <button (click)="onCancelEditName()" class="ml-2 text-gray-500 hover:text-red-700 transition">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd"
+              d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+              clip-rule="evenodd" />
+          </svg>
+        </button>
+      </div>
+      } @else {
+      <span class="font-semibold text-gray-800">{{ section.name }}</span>
+      }
+    </div>
+
+    @if (!section.isEditingName) {
+    <div class="flex items-center space-x-2 ml-4">
+      <button (click)="onAddChild()" title="Adicionar Subárea" class="text-gray-500 hover:text-gray-800 transition">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5"
+          viewBox="0 0 640 640"><!--!Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+          <path fill="#19aa79"
+            d="M352 128C352 110.3 337.7 96 320 96C302.3 96 288 110.3 288 128L288 288L128 288C110.3 288 96 302.3 96 320C96 337.7 110.3 352 128 352L288 352L288 512C288 529.7 302.3 544 320 544C337.7 544 352 529.7 352 512L352 352L512 352C529.7 352 544 337.7 544 320C544 302.3 529.7 288 512 288L352 288L352 128z" />
+        </svg>
+      </button>
+
+      <button (click)="onOpenPromptModal()" title="Configurar Prompt"
+        class="text-gray-500 hover:text-gray-800 transition">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5"
+          viewBox="0 0 640 640"><!--!Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+          <path fill="#19aa79"
+            d="M128 128C128 92.7 156.7 64 192 64L341.5 64C358.5 64 374.8 70.7 386.8 82.7L493.3 189.3C505.3 201.3 512 217.6 512 234.6L512 512C512 547.3 483.3 576 448 576L192 576C156.7 576 128 547.3 128 512L128 128zM336 122.5L336 216C336 229.3 346.7 240 360 240L453.5 240L336 122.5zM248 320C234.7 320 224 330.7 224 344C224 357.3 234.7 368 248 368L392 368C405.3 368 416 357.3 416 344C416 330.7 405.3 320 392 320L248 320zM248 416C234.7 416 224 426.7 224 440C224 453.3 234.7 464 248 464L392 464C405.3 464 416 453.3 416 440C416 426.7 405.3 416 392 416L248 416z" />
+        </svg>
+
+      </button>
+
+      <button (click)="onOpenRAGModal()" title="Configurar Arquivos RAG"
+        class="text-gray-500 hover:text-gray-800 transition">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 640 640">
+          <!--!Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+          <path fill="#19aa79"
+            d="M128 64C92.7 64 64 92.7 64 128L64 512C64 547.3 92.7 576 128 576L208 576L208 464C208 428.7 236.7 400 272 400L448 400L448 234.5C448 217.5 441.3 201.2 429.3 189.2L322.7 82.7C310.7 70.7 294.5 64 277.5 64L128 64zM389.5 240L296 240C282.7 240 272 229.3 272 216L272 122.5L389.5 240zM272 444C261 444 252 453 252 464L252 592C252 603 261 612 272 612C283 612 292 603 292 592L292 564L304 564C337.1 564 364 537.1 364 504C364 470.9 337.1 444 304 444L272 444zM304 524L292 524L292 484L304 484C315 484 324 493 324 504C324 515 315 524 304 524zM400 444C389 444 380 453 380 464L380 592C380 603 389 612 400 612L432 612C460.7 612 484 588.7 484 560L484 496C484 467.3 460.7 444 432 444L400 444zM420 572L420 484L432 484C438.6 484 444 489.4 444 496L444 560C444 566.6 438.6 572 432 572L420 572zM508 464L508 592C508 603 517 612 528 612C539 612 548 603 548 592L548 548L576 548C587 548 596 539 596 528C596 517 587 508 576 508L548 508L548 484L576 484C587 484 596 475 596 464C596 453 587 444 576 444L528 444C517 444 508 453 508 464z" />
+        </svg>
+      </button>
+
+      <button (click)="onStartEditName()" title="Editar Seção" class="text-gray-500 hover:text-gray-800 transition">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5"
+          viewBox="0 0 640 640"><!--!Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+          <path fill="#19aa79"
+            d="M535.6 85.7C513.7 63.8 478.3 63.8 456.4 85.7L432 110.1L529.9 208L554.3 183.6C576.2 161.7 576.2 126.3 554.3 104.4L535.6 85.7zM236.4 305.7C230.3 311.8 225.6 319.3 222.9 327.6L193.3 416.4C190.4 425 192.7 434.5 199.1 441C205.5 447.5 215 449.7 223.7 446.8L312.5 417.2C320.7 414.5 328.2 409.8 334.4 403.7L496 241.9L398.1 144L236.4 305.7zM160 128C107 128 64 171 64 224L64 480C64 533 107 576 160 576L416 576C469 576 512 533 512 480L512 384C512 366.3 497.7 352 480 352C462.3 352 448 366.3 448 384L448 480C448 497.7 433.7 512 416 512L160 512C142.3 512 128 497.7 128 480L128 224C128 206.3 142.3 192 160 192L256 192C273.7 192 288 177.7 288 160C288 142.3 273.7 128 256 128L160 128z" />
+        </svg>
+      </button>
+
+      <button (click)="onDeleteSection()" title="Excluir Seção" class="text-red-500 hover:text-red-700 transition">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5"
+          viewBox="0 0 640 640"><!--!Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+          <path fill="#19aa79"
+            d="M232.7 69.9C237.1 56.8 249.3 48 263.1 48L377 48C390.8 48 403 56.8 407.4 69.9L416 96L512 96C529.7 96 544 110.3 544 128C544 145.7 529.7 160 512 160L128 160C110.3 160 96 145.7 96 128C96 110.3 110.3 96 128 96L224 96L232.7 69.9zM128 208L512 208L512 512C512 547.3 483.3 576 448 576L192 576C156.7 576 128 547.3 128 512L128 208zM216 272C202.7 272 192 282.7 192 296L192 488C192 501.3 202.7 512 216 512C229.3 512 240 501.3 240 488L240 296C240 282.7 229.3 272 216 272zM320 272C306.7 272 296 282.7 296 296L296 488C296 501.3 306.7 512 320 512C333.3 512 344 501.3 344 488L344 296C344 282.7 333.3 272 320 272zM424 272C410.7 272 400 282.7 400 296L400 488C400 501.3 410.7 512 424 512C437.3 512 448 501.3 448 488L448 296C448 282.7 437.3 272 424 272z" />
+        </svg>
+      </button>
+    </div>
+    }
+  </div>
+
+  @if (section.isExpanded && !section.isEditingName) {
+  <div class="p-3 text-sm text-gray-600 border-l-2 border-[#19AA79] ml-5 mt-1">
+    <p class="line-clamp-2">{{ section.promptContent }}</p>
+    <button (click)="onOpenViewMoreModal()" class="text-[#19AA79] hover:text-[#158a62] font-medium mt-1">Ver
+      mais</button>
+  </div>
+  }
+
+  @if (section.isExpanded && section.children.length > 0) {
+  <div class="mt-2">
+    @for (child of section.children; track child.id) {
+    <app-prompt-section-item [section]="child" [parent]="section" [baseColor]="baseColor"
+      [baseColorHover]="baseColorHover" (addChild)="addChild.emit($event)" (startEditName)="startEditName.emit($event)"
+      (saveName)="saveName.emit($event)" (cancelEditName)="cancelEditName.emit($event)"
+      (deleteSection)="deleteSection.emit($event)" (openPromptModal)="openPromptModal.emit($event)"
+      (openRAGModal)="openRAGModal.emit($event)"
+      (openViewMoreModal)="openViewMoreModal.emit($event)"></app-prompt-section-item>
+    }
+  </div>
+  }
+</div>

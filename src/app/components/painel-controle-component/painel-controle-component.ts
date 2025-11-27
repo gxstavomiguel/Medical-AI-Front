@@ -12,7 +12,7 @@ export class PainelControleComponent {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-  ) {}
+  ) { }
 
   sidebarAberta = false;
   itemAtivo = 'Dashboard';

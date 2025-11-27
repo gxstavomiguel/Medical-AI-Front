@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
-import { environment as env } from '../../environments/environment';
+import { environment as env } from '../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -11,7 +11,7 @@ export class AuthService {
   constructor(
     private router: Router,
     private http: HttpClient,
-  ) {}
+  ) { }
 
   private tokenKey = 'authToken';
 

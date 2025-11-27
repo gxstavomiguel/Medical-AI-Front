@@ -1,10 +1,9 @@
 <div class="h-screen w-full flex relative overflow-hidden">
   @if (sidebarAberta && isMobile()) {
-    <div class="fixed inset-0 bg-black/40 z-40 lg:hidden" (click)="fecharSidebar($event)"></div>
+  <div class="fixed inset-0 bg-black/40 z-40 lg:hidden" (click)="fecharSidebar($event)"></div>
   }
 
-  <div
-    id="sidebar"
+  <div id="sidebar"
     class="fixed lg:relative left-0 top-0 h-full z-50 bg-gray-100 text-black p-4 flex flex-col gap-5 transition-all duration-300"
     [ngClass]="{
       '-translate-x-full': !sidebarAberta && isMobile(),
@@ -13,42 +12,32 @@
       'w-64': sidebarAberta && isMobile(),
       'w-20': !sidebarAberta && !isMobile(),
       'w-56': sidebarAberta && !isMobile(),
-    }"
-    (click)="manterSidebarAberta($event)"
-  >
+    }" (click)="manterSidebarAberta($event)">
     <div class="flex items-center justify-center h-8 mt-1.5 lg:mt-0">
-      <img
-        [src]="sidebarAberta ? 'assets/logo2.png' : 'assets/logo3.png'"
-        (click)="toggleSidebar($event)"
-        class="cursor-pointer"
-      />
+      <img [src]="sidebarAberta ? 'assets/logo2.png' : 'assets/logo3.png'" (click)="toggleSidebar($event)"
+        class="cursor-pointer" />
     </div>
 
     <div class="flex flex-col gap-3 mt-3">
       @for (btn of botoes; track btn.nome) {
-        <button
-          (click)="navegar(btn)"
-          class="flex items-center gap-3 p-2 rounded transition-colors w-full h-12"
-          [ngClass]="itemAtivo === btn.nome ? 'bg-gray-300' : 'hover:bg-gray-200'"
-        >
-          <img [src]="btn.icone" class="w-8 h-8 shrink-0" />
+      <button (click)="navegar(btn)" class="flex items-center gap-3 p-2 rounded transition-colors w-full h-12"
+        [ngClass]="itemAtivo === btn.nome ? 'bg-gray-300' : 'hover:bg-gray-200'">
+        <img [src]="btn.icone" class="w-8 h-8 shrink-0" />
 
-          @if (sidebarAberta) {
-            <span class="text-sm font-medium flex-1 text-left block">
-              {{ btn.nome }}
-            </span>
-          }
-        </button>
+        @if (sidebarAberta) {
+        <span class="text-sm font-medium flex-1 text-left block">
+          {{ btn.nome }}
+        </span>
+        }
+      </button>
       }
     </div>
   </div>
 
   <div class="flex-1 flex flex-col">
     <div class="w-full bg-[#19AA79] text-white h-16 flex items-center justify-between px-4">
-      <button
-        class="lg:hidden p-2 rounded-md bg-white/20 flex items-center justify-center w-10 h-10"
-        (click)="toggleSidebar($event)"
-      >
+      <button class="lg:hidden p-2 rounded-md bg-white/20 flex items-center justify-center w-10 h-10"
+        (click)="toggleSidebar($event)">
         <img src="assets/menu.png" class="w-6 h-6" />
       </button>
 
@@ -62,6 +51,7 @@
     </div>
 
     <div class="flex-1 bg-white p-6 overflow-auto">
+      <!-- <div class="flex-1 bg-white p-6"> -->
       <router-outlet></router-outlet>
     </div>
   </div>

@@ -1,16 +1,16 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { PromptOutput } from '../../interfaces/prompt-output.interface';
-import { UsuarioInterface } from '../../interfaces/usuario.interface';
+import { PromptOutput } from '../interfaces/prompt-output.interface';
+import { UsuarioInterface } from '../interfaces/usuario.interface';
 import { getHeaderToken } from '../utils/token';
 // import { URL } from '../../environment';
-import { environment as env } from '../../environments/environment';
+import { environment as env } from '../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class MensagemService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   enviarMensagem(texto: string, foi_usuario: boolean, horario: string, imagem?: string) {
     const payload = {

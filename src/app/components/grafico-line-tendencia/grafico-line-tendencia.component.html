@@ -1,0 +1,25 @@
+<div class="w-full h-[300px] sm:h-[350px] bg-white border border-gray-300 rounded-lg p-4">
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 w-full h-full">
+    <div class="w-full h-full">
+      <app-grafico-line titulo="Tendência Mensal" [labels]="labels" [series]="series" [showLegend]="true"
+        [fillArea]="true" [tension]="0.4"></app-grafico-line>
+    </div>
+
+    <div class="w-full h-full flex flex-col justify-start p-4">
+      <h3 class="text-lg font-semibold mb-4">Resumo Analítico</h3>
+      <ul class="space-y-3 text-gray-700">
+        @for (item of resumoData; track item) {
+        <li class="flex items-start">
+          <span class="w-2 h-2 rounded-full mt-2 mr-2 shrink-0" [style.background-color]="item.color"></span>
+          <p>
+            @if (item.strongText) {
+            <strong [style.color]="item.color">{{ item.strongText }}</strong>
+            }
+            {{ item.text }}
+          </p>
+        </li>
+        }
+      </ul>
+    </div>
+  </div>
+</div>
