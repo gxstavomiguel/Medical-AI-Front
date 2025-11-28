@@ -1,11 +1,11 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, Input, OnInit } from '@angular/core';
 import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 
 @Component({
   selector: 'app-grafico-barra',
-  imports: [BaseChartDirective, CommonModule],
+  imports: [BaseChartDirective],
   templateUrl: './grafico-barra.component.html',
 })
 export class GraficoBarraComponent implements OnInit {

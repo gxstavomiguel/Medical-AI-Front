@@ -84,7 +84,7 @@
 import { Component, Input, OnChanges } from '@angular/core';
 import { Chart, ChartData, ChartOptions, ChartDataset } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
-import { CommonModule } from '@angular/common';
+
 
 // Interface para definir a estrutura de uma série de dados para o gráfico de linha
 export interface LineChartSeries {
@@ -96,7 +96,7 @@ export interface LineChartSeries {
 @Component({
   selector: 'app-grafico-line',
   standalone: true,
-  imports: [BaseChartDirective, CommonModule],
+  imports: [BaseChartDirective],
   templateUrl: './grafico-line.component.html',
 })
 export class GraficoLineComponent implements OnChanges {

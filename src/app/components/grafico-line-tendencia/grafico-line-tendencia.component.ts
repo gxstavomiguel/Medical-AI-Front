@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { GraficoLineComponent, LineChartSeries } from '../grafico-line/grafico-line.component';
 
 @Component({
   selector: 'app-tendencia-mensal-container',
   standalone: true,
-  imports: [CommonModule, GraficoLineComponent],
+  imports: [GraficoLineComponent],
   templateUrl: './grafico-line-tendencia.component.html',
 })
 export class TendenciaMensalContainerComponent {
