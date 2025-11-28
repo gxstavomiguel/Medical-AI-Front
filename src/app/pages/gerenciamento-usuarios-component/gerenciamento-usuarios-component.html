@@ -1,1 +1,396 @@
-<p>gerenciamento-usuarios-component works!</p>
+<div class="p-4 sm:p-6 md:p-8">
+  <div class="flex flex-col sm:flex-row justify-end gap-3 mb-6">
+    <button (click)="abrirModalImportarUsuarios()"
+      class="flex items-center justify-center px-4 py-2 border border-[#19AA79] text-[#19AA79] rounded-md hover:bg-[#158a62] hover:text-white transition-colors text-sm font-medium">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24"
+        stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+      </svg>
+      Importar usuários(excel)
+    </button>
+    <button (click)="abrirModalNovaTurma()"
+      class="flex items-center justify-center px-4 py-2 bg-[#19AA79] text-white rounded-md hover:bg-[#158a62] transition-colors text-sm font-medium">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24"
+        stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+      </svg>
+      Nova turma
+    </button>
+  </div>
+
+  <div class="flex flex-col md:flex-row gap-3 mb-6">
+    <div class="relative flex-1 min-w-0">
+      <input type="text" [(ngModel)]="termoBusca" placeholder="Procurar por nome ou código de matrícula..."
+        class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-[#1C3249] focus:border-[#1C3249] text-sm" />
+      <svg xmlns="http://www.w3.org/2000/svg"
+        class="h-5 w-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" fill="none" viewBox="0 0 24 24"
+        stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+      </svg>
+    </div>
+
+    <select [(ngModel)]="filtroTurma"
+      class="w-full md:w-40 px-3 py-2 border border-gray-300 rounded-md focus:ring-[#1C3249] focus:border-[#1C3249] text-sm appearance-none bg-white bg-no-repeat bg-right-2"
+      style="background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%20viewBox%3D%220%200%20292.4%20292.4%22%3E%3Cpath%20fill%3D%22%23000000%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13.2-5.4H18.6c-5.1%200-9.8%202-13.2%205.4A17.6%2017.6%200%200%200%200%2082.6c0%204.8%201.9%209.2%205.4%2012.6l128%20128c3.4%203.4%207.8%205.4%2012.6%205.4s9.2-2%2012.6-5.4l128-128c3.5-3.4%205.4-7.8%205.4-12.6%200-4.8-1.9-9.2-5.4-12.6z%22%2F%3E%3C%2Fsvg%3E'); background-size: 12px; background-position: right 10px center;">
+      <option value="">Turma</option>
+      @for (turmaNome of todasTurmas; track turmaNome) {
+      <option [value]="turmaNome">{{ turmaNome }}</option>
+      }
+    </select>
+
+    <select [(ngModel)]="filtroSituacao"
+      class="w-full md:w-40 px-3 py-2 border border-gray-300 rounded-md focus:ring-[#1C3249] focus:border-[#1C3249] text-sm appearance-none bg-white bg-no-repeat bg-right-2"
+      style="background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%20viewBox%3D%220%200%20292.4%20292.4%22%3E%3Cpath%20fill%3D%22%23000000%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13.2-5.4H18.6c-5.1%200-9.8%202-13.2%205.4A17.6%2017.6%200%200%200%200%2082.6c0%204.8%201.9%209.2%205.4%2012.6l128%20128c3.4%203.4%207.8%205.4%2012.6%205.4s9.2-2%2012.6-5.4l128-128c3.5-3.4%205.4-7.8%205.4-12.6%200-4.8-1.9-9.2-5.4-12.6z%22%2F%3E%3C%2Fsvg%3E'); background-size: 12px; background-position: right 10px center;">
+      <option value="">Situação</option>
+      <option value="Ativo">Ativo</option>
+      <option value="Inativo">Inativo</option>
+    </select>
+  </div>
+
+  <div class="space-y-6">
+    @for (turma of turmasFiltradas; track turma.id) {
+    <div class="border border-gray-200 rounded-lg shadow-sm">
+      <div class="flex items-center justify-between p-4 bg-gray-50 cursor-pointer hover:bg-gray-100 transition-colors"
+        (click)="toggleExpandirTurma(turma)">
+        <div class="flex items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-600 transition-transform"
+            [ngClass]="{'rotate-90': turma.expandida}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+          @if (turma.editandoNome) {
+          <div class="flex items-center gap-2">
+            <input type="text" [(ngModel)]="turmaParaEditar!.nome"
+              class="text-lg font-semibold border border-gray-300 rounded-md px-2 py-1 focus:ring-[#1C3249] focus:border-[#1C3249]"
+              (click)="$event.stopPropagation()" />
+            <button (click)="salvarEdicaoTurma(turma); $event.stopPropagation()"
+              class="text-green-500 hover:text-green-700">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd"
+                  d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                  clip-rule="evenodd" />
+              </svg>
+            </button>
+            <button (click)="cancelarEdicaoTurma(turma); $event.stopPropagation()"
+              class="text-red-500 hover:text-red-700">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd"
+                  d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                  clip-rule="evenodd" />
+              </svg>
+            </button>
+          </div>
+          } @else {
+          <h2 class="text-lg font-semibold text-gray-800">{{ turma.nome }}</h2>
+          }
+        </div>
+        <div class="flex items-center gap-2" (click)="$event.stopPropagation()">
+          <button (click)="iniciarEdicaoTurma(turma)"
+            class="text-gray-500 hover:text-blue-600 p-1 rounded-full hover:bg-gray-200 transition-colors"
+            title="Editar Turma">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+            </svg>
+          </button>
+          <button (click)="excluirTurma(turma.id)"
+            class="text-gray-500 hover:text-red-600 p-1 rounded-full hover:bg-gray-200 transition-colors"
+            title="Excluir Turma">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      @if (turma.expandida) {
+      <div class="p-4">
+        <div class="table-responsive">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+              <tr>
+                <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <div class="flex items-center">Código <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1"
+                      fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+                    </svg></div>
+                </th>
+                <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <div class="flex items-center">Nome <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1"
+                      fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+                    </svg></div>
+                </th>
+                <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  E-mail</th>
+                <th scope="col"
+                  class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden sm:table-cell">
+                  Senha</th>
+                <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Situação</th>
+                <th scope="col" class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Ações</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              @for (usuario of turma.usuarios; track usuario.codigo) {
+              <tr>
+                <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">{{ usuario.codigo }}</td>
+                <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">{{ usuario.nome }}</td>
+                <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">{{ usuario.email }}</td>
+                <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500 hidden sm:table-cell">{{ usuario.senha }}
+                </td>
+                <td class="px-4 py-3 whitespace-nowrap text-sm">
+                  <span
+                    [ngClass]="{'bg-green-100 text-green-800': usuario.situacao === 'Ativo', 'bg-red-100 text-red-800': usuario.situacao === 'Inativo'}"
+                    class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full">
+                    {{ usuario.situacao }}
+                  </span>
+                </td>
+                <td class="px-4 py-3 whitespace-nowrap text-right text-sm font-medium">
+                  <div class="flex justify-end gap-2">
+                    <button (click)="editarUsuario(usuario)"
+                      class="text-gray-500 hover:text-blue-600 p-1 rounded-full hover:bg-gray-200 transition-colors"
+                      title="Editar Usuário">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                      </svg>
+                    </button>
+                    <button (click)="excluirUsuario(turma, usuario)"
+                      class="text-gray-500 hover:text-red-600 p-1 rounded-full hover:bg-gray-200 transition-colors"
+                      title="Excluir Usuário">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                      </svg>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+
+        <button (click)="abrirModalNovoUsuario(turma.id)"
+          class="flex items-center px-3 py-1 mt-4 text-[#19AA79] border border-[#19AA79] rounded-md hover:bg-blue-50 transition-colors text-sm font-medium">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+          </svg>
+          Novo usuário
+        </button>
+      </div>
+      }
+    </div>
+    } @empty {
+    <div class="text-center py-10 text-gray-500">
+      Nenhuma turma encontrada.
+    </div>
+    }
+  </div>
+
+  <!-- MODAL: Nova Turma (Imagem 2) -->
+  @if (modalNovaTurmaAberto) {
+  <div class="fixed inset-0 z-50 flex items-center justify-center modal-overlay">
+    <div class="bg-white rounded-lg shadow-xl w-full max-w-md mx-4 modal-content" (click)="$event.stopPropagation()">
+      <div class="p-6">
+        <h3 class="text-xl font-semibold mb-4">Nova Turma</h3>
+        <p class="mb-2 text-sm text-gray-600">Informe o nome da nova turma</p>
+        <input type="text" [(ngModel)]="novaTurmaNome" placeholder="Nome da turma"
+          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-[#1C3249] focus:border-[#1C3249] text-sm" />
+        <div class="flex justify-end gap-3 mt-6">
+          <button (click)="fecharModalNovaTurma()"
+            class="px-4 py-2 text-gray-600 border border-gray-300 rounded-md hover:bg-gray-100 transition-colors text-sm font-medium">
+            Cancelar
+          </button>
+          <button (click)="salvarNovaTurma()" [disabled]="!novaTurmaNome.trim()"
+            class="px-4 py-2 bg-#19AA79 text-white rounded-md hover:bg-[#1C3249] disabled:opacity-50 transition-colors text-sm font-medium">
+            Salvar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  }
+
+  @if (modalNovoUsuarioAberto) {
+  <div class="fixed inset-0 z-50 flex items-center justify-center modal-overlay">
+    <div class="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 modal-content" (click)="$event.stopPropagation()">
+      <div class="p-6">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-xl font-semibold">Novo Usuário</h3>
+          <button (click)="fecharModalNovoUsuario()" class="text-gray-400 hover:text-gray-600">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        <form (ngSubmit)="salvarNovoUsuario()" class="space-y-4">
+          <div>
+            <label for="codigo" class="block text-sm font-medium text-gray-700">Código</label>
+            <input type="text" id="codigo" [(ngModel)]="novoUsuarioForm.codigo" name="codigo"
+              placeholder="Informe o código do estudante" required
+              class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#1C3249] focus:border-[#1C3249] text-sm" />
+          </div>
+          <div>
+            <label for="nome" class="block text-sm font-medium text-gray-700">Nome</label>
+            <input type="text" id="nome" [(ngModel)]="novoUsuarioForm.nome" name="nome"
+              placeholder="Informe o nome do estudante" required
+              class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#1C3249] focus:border-[#1C3249] text-sm" />
+          </div>
+          <div>
+            <label for="email" class="block text-sm font-medium text-gray-700">E-mail</label>
+            <input type="email" id="email" [(ngModel)]="novoUsuarioForm.email" name="email"
+              placeholder="Informe o e-mail do estudante" required
+              class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#1C3249] focus:border-[#1C3249] text-sm" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Situação</label>
+            <div class="flex items-center space-x-4">
+              <label class="inline-flex items-center">
+                <input type="radio" [(ngModel)]="novoUsuarioForm.situacao" name="situacao" value="Ativo"
+                  class="form-radio text-blue-600" />
+                <span class="ml-2 text-sm text-gray-700">Ativo</span>
+              </label>
+              <label class="inline-flex items-center">
+                <input type="radio" [(ngModel)]="novoUsuarioForm.situacao" name="situacao" value="Inativo"
+                  class="form-radio text-blue-600" />
+                <span class="ml-2 text-sm text-gray-700">Inativo</span>
+              </label>
+            </div>
+          </div>
+          <div>
+            <label for="turma" class="block text-sm font-medium text-gray-700">Turma</label>
+            <select id="turma" [(ngModel)]="novoUsuarioForm.turmaId" name="turma" required
+              class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#1C3249] focus:border-[#1C3249] text-sm">
+              @for (turma of turmas; track turma.id) {
+              <option [value]="turma.id">{{ turma.nome }}</option>
+              }
+            </select>
+          </div>
+
+          <div class="flex justify-end gap-3 pt-4">
+            <button type="button" (click)="fecharModalNovoUsuario()"
+              class="px-4 py-2 text-[#19AA79] border border-[#19AA79] rounded-md hover:bg-blue-50 transition-colors text-sm font-medium">
+              Cancelar
+            </button>
+            <button type="submit"
+              class="px-4 py-2 bg-[#19AA79] text-white rounded-md hover:bg-[#1C3249] transition-colors text-sm font-medium">
+              Salvar
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  }
+
+  @if (modalImportarUsuariosAberto) {
+  <div class="fixed inset-0 z-50 flex items-center justify-center modal-overlay">
+    <div class="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 modal-content" (click)="$event.stopPropagation()">
+      <div class="p-6">
+        <h3 class="text-xl font-semibold mb-6">Importar Usuários</h3>
+
+        <div
+          class="border-2 border-dashed border-gray-300 rounded-lg p-10 text-center cursor-pointer hover:border-[#1C3249] transition-colors"
+          (click)="simularUpload($event)">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mx-auto text-gray-400 mb-2" fill="none"
+            viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+          <p class="text-sm text-gray-600">Arraste o arquivo aqui ou Clique para enviar</p>
+          <input type="file" class="hidden" accept=".xlsx, .xls" (change)="simularUpload($event)" />
+        </div>
+
+        <div class="flex justify-end gap-3 mt-6">
+          <button (click)="fecharModalImportarUsuarios()"
+            class="px-4 py-2 text-[#19AA79] border border-[#19AA79] rounded-md hover:bg-blue-50 transition-colors text-sm font-medium">
+            Cancelar
+          </button>
+          <button [disabled]="true" class="px-4 py-2 bg-[#19AA79] text-white rounded-md text-sm font-medium">
+            Importar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  }
+
+  @if (modalPreVisualizacaoImportacaoAberto) {
+  <div class="fixed inset-0 z-50 flex items-center justify-center modal-overlay">
+    <div class="bg-white rounded-lg shadow-xl w-full max-w-3xl mx-4 modal-content" (click)="$event.stopPropagation()">
+      <div class="p-6">
+        <h3 class="text-xl font-semibold mb-6">Importar Usuários</h3>
+
+        <div class="border-2 border-dashed border-gray-300 rounded-lg p-10 text-center">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mx-auto text-gray-400 mb-2" fill="none"
+            viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+          <p class="text-sm text-gray-600">Arquivo anexado. Pré-visualização abaixo.</p>
+        </div>
+
+        <div class="mt-6 table-responsive max-h-60 overflow-y-auto">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50 sticky top-0">
+              <tr>
+                <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Código</th>
+                <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Nome</th>
+                <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  E-mail</th>
+                <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Turma</th>
+                <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Situação</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              @for (dado of dadosImportacao; track $index) {
+              <tr>
+                <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">{{ dado.codigo }}</td>
+                <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">{{ dado.nome }}</td>
+                <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">{{ dado.email }}</td>
+                <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">{{ dado.turma }}</td>
+                <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">{{ dado.situacao }}</td>
+              </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+
+        <div class="flex justify-end gap-3 mt-6">
+          <button (click)="fecharModalPreVisualizacao()"
+            class="px-4 py-2 text-[#19AA79] border border-[#19AA79] rounded-md hover:bg-blue-50 transition-colors text-sm font-medium">
+            Cancelar
+          </button>
+          <button (click)="salvarImportacao()"
+            class="px-4 py-2 bg-[#19AA79] text-white rounded-md hover:bg-[#1C3249] transition-colors text-sm font-medium">
+            Importar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  }
+
+  <!-- @if (turmas.some(t => t.editandoNome)) {
+  } -->
+
+  <!-- Trocar onde tem: hover:bg-blue-50 para fundo branco e bordar verdes/texto verde -->
+
+
+</div>

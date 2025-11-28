@@ -66,26 +66,8 @@ const MOCK_DATA: PromptSection[] = [
 })
 export class CadastroPromptsComponent implements OnInit {
 
-
-
-
-
-
   editablePrompt: string = '';
   promptFiles: File[] = [];
-
-
-
-
-
-
-
-
-
-
-
-
-
   promptSections: PromptSection[] = [];
   nextId = 100;
 
@@ -283,4 +265,9 @@ export class CadastroPromptsComponent implements OnInit {
   saveRAGFiles() {
 
   }
+
+  onOpenViewMore(): void {
+
+  }
+
 }

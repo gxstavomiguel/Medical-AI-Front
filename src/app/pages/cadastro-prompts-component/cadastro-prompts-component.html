@@ -9,7 +9,6 @@
   </button>
 </div>
 
-<!-- Ajustar tamanho dinâmico quando abro e fecho algum tema -->
 <div class="bg-white p-6 border mb border-gray-300 transition-all duration-200 min-h-[60vh]" [ngClass]="{
     'flex items-center justify-center': promptSections.length === 0
   }">
@@ -22,8 +21,7 @@
   <app-prompt-section-item [section]="section" [baseColor]="baseColor" [baseColorHover]="baseColorHover" [parent]="null"
     (addChild)="addChildSection($event)" (startEditName)="startEditName($event)" (saveName)="saveName($event)"
     (cancelEditName)="cancelEditName($event)" (deleteSection)="deleteSection($event)"
-    (openPromptModal)="openPromptModal($event)" (openRAGModal)="openRAGModal($event)"
-    (openViewMoreModal)="openViewMoreModal($event)"></app-prompt-section-item>
+    (openPromptModal)="openPromptModal($event)" (openRAGModal)="openRAGModal($event)"></app-prompt-section-item>
   }
   }
 </div>
@@ -73,18 +71,11 @@
 </div>
 }
 
-
-
 @if (isRAGModalOpen && currentSection) {
 <div class="fixed inset-0 z-50 flex items-center justify-center p-4">
-  <!-- Overlay/Background: bg-black/60 backdrop-blur-sm -->
   <div class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity"></div>
-
-  <!-- Modal Card: bg-white/90 backdrop-blur-md, rounded-2xl, shadow-2xl, max-w-3xl -->
   <div class="relative bg-white/90 backdrop-blur-md rounded-2xl shadow-2xl w-full max-w-3xl
               transform transition-all">
-
-    <!-- Header: rounded-t-2xl, text-white drop-shadow-sm -->
     <div class="p-5 flex justify-between items-center rounded-t-2xl" [ngClass]="baseColor">
       <h3 class="text-xl font-bold text-white drop-shadow-sm">
         Configurar Arquivos RAG para: {{ currentSection.name }}
@@ -156,8 +147,52 @@
 }
 
 @if (isViewMoreModalOpen && currentSection) {
-<!-- Deve exibir os arquivos RAG incluidos no prompt -->
+@if (isViewMoreModalOpen && currentSection) {
+<div
+  class="mt-4 mb-6 border border-gray-300 rounded-2xl bg-white/90 backdrop-blur p-6 shadow-lg transition-all duration-300">
 
+  <div class="flex justify-between items-center mb-4">
+    <h3 class="text-lg font-bold text-gray-800">
+      Conteúdo vinculado a: {{ currentSection.name }}
+    </h3>
 
+    <button (click)="closeViewMoreModal()" class="text-gray-600 hover:text-gray-800 transition">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+  </div>
+
+  <div class="space-y-4">
+
+    <h4 class="text-md font-semibold text-gray-700">Arquivos RAG usados</h4>
+
+    @if (currentSection.ragDocuments.length === 0) {
+    <p class="text-gray-500 text-sm">Nenhum documento vinculado.</p>
+    } @else {
+    @for (doc of currentSection.ragDocuments; track doc.id) {
+    <div class="flex justify-between items-center p-3 border border-gray-200 rounded-lg bg-white shadow-sm">
+
+      <div class="flex items-center space-x-3">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#19AA79]" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd"
+            d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.414L16.586 7A2 2 0 0117 8.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm4 6a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1zm0 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"
+            clip-rule="evenodd" />
+        </svg>
+        <span class="text-gray-700 font-medium">{{ doc.name }}</span>
+      </div>
+
+      <button class="text-[#19AA79] hover:text-[#148a63] transition p-1 rounded-md hover:bg-green-50">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+          <path d="M10 3c-4.5 0-8 3-10 7 2 4 5.5 7 10 7s8-3 10-7c-2-4-5.5-7-10-7zm0 12a5 5 0 110-10 5 5 0 010 10z" />
+        </svg>
+      </button>
+    </div>
+    }
+    }
+  </div>
+
+</div>
+}
 
 }

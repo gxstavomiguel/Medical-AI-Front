@@ -86,7 +86,7 @@
   @if (section.isExpanded && !section.isEditingName) {
   <div class="p-3 text-sm text-gray-600 border-l-2 border-[#19AA79] ml-5 mt-1">
     <p class="line-clamp-2">{{ section.promptContent }}</p>
-    <button (click)="onOpenViewMoreModal()" class="text-[#19AA79] hover:text-[#158a62] font-medium mt-1">Ver
+    <button class="text-[#19AA79] hover:text-[#158a62] font-medium mt-1">Ver
       mais</button>
   </div>
   }
@@ -98,8 +98,7 @@
       [baseColorHover]="baseColorHover" (addChild)="addChild.emit($event)" (startEditName)="startEditName.emit($event)"
       (saveName)="saveName.emit($event)" (cancelEditName)="cancelEditName.emit($event)"
       (deleteSection)="deleteSection.emit($event)" (openPromptModal)="openPromptModal.emit($event)"
-      (openRAGModal)="openRAGModal.emit($event)"
-      (openViewMoreModal)="openViewMoreModal.emit($event)"></app-prompt-section-item>
+      (openRAGModal)="openRAGModal.emit($event)"></app-prompt-section-item>
     }
   </div>
   }

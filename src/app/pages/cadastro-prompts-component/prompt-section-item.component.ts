@@ -22,7 +22,6 @@ export class PromptSectionItemComponent {
   @Output() deleteSection = new EventEmitter<{ section: PromptSection, parent: PromptSection | null }>();
   @Output() openPromptModal = new EventEmitter<PromptSection>();
   @Output() openRAGModal = new EventEmitter<PromptSection>();
-  @Output() openViewMoreModal = new EventEmitter<PromptSection>();
 
   toggleExpand(): void {
     this.section.isExpanded = !this.section.isExpanded;
@@ -54,10 +53,6 @@ export class PromptSectionItemComponent {
 
   onOpenRAGModal(): void {
     this.openRAGModal.emit(this.section);
-  }
-
-  onOpenViewMoreModal(): void {
-    this.openViewMoreModal.emit(this.section);
   }
 
   getPadding(): string {
