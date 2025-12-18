@@ -9,7 +9,7 @@ interface Usuario {
   email: string;
   senha: string;
   situacao: 'Ativo' | 'Inativo';
-  acoes: string; // Ações como editar, excluir, etc.
+  acoes: string;
 }
 
 interface Turma {
@@ -29,6 +29,7 @@ interface Turma {
   templateUrl: './gerenciamento-usuarios-component.html',
 })
 export class GerenciamentoUsuariosComponent implements OnInit {
+  // Mapear dados reais da API
   turmas: Turma[] = [
     {
       id: 1,
@@ -56,17 +57,23 @@ export class GerenciamentoUsuariosComponent implements OnInit {
     }
   ];
 
+  colunaOrdenacao: string = '';
+  direcaoOrdenacao: 'asc' | 'desc' = 'asc';
+
   termoBusca: string = '';
   filtroTurma: string = '';
   filtroSituacao: string = '';
   turmaParaAdicionar: string = '';
   turmaParaEditar: Turma | null = null;
   turmaParaExcluir: Turma | null = null;
-
+  modalEditarUsuarioAberto: boolean = false;
   modalNovaTurmaAberto: boolean = false;
   modalNovoUsuarioAberto: boolean = false;
   modalImportarUsuariosAberto: boolean = false;
   modalPreVisualizacaoImportacaoAberto: boolean = false;
+
+  usuarioParaEditar: Usuario | null = null;
+  turmaDoUsuarioEditado: Turma | null = null;
 
   novaTurmaNome: string = '';
   novoUsuarioForm = {
@@ -76,6 +83,15 @@ export class GerenciamentoUsuariosComponent implements OnInit {
     situacao: 'Ativo',
     turmaId: 0
   };
+
+  editarUsuarioForm = {
+    codigo: '',
+    nome: '',
+    email: '',
+    situacao: 'Ativo' as 'Ativo' | 'Inativo',
+    turmaId: 0
+  };
+
   dadosImportacao: any[] = [];
 
   constructor() { }
@@ -83,6 +99,32 @@ export class GerenciamentoUsuariosComponent implements OnInit {
   ngOnInit(): void {
     this.novoUsuarioForm.turmaId = this.turmas[0]?.id || 0;
   }
+
+  ordenarPor(coluna: string, turma: Turma): void {
+    if (this.colunaOrdenacao === coluna) {
+      this.direcaoOrdenacao = this.direcaoOrdenacao === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.colunaOrdenacao = coluna;
+      this.direcaoOrdenacao = 'asc';
+    }
+
+    turma.usuarios.sort((a: any, b: any) => {
+      let valorA = a[coluna];
+      let valorB = b[coluna];
+
+      if (typeof valorA === 'string') valorA = valorA.toLowerCase();
+      if (typeof valorB === 'string') valorB = valorB.toLowerCase();
+
+      if (valorA < valorB) {
+        return this.direcaoOrdenacao === 'asc' ? -1 : 1;
+      }
+      if (valorA > valorB) {
+        return this.direcaoOrdenacao === 'asc' ? 1 : -1;
+      }
+      return 0;
+    });
+  }
+
 
   abrirModalNovaTurma(): void {
     this.novaTurmaNome = '';
@@ -195,16 +237,13 @@ export class GerenciamentoUsuariosComponent implements OnInit {
     this.turmas = this.turmas.filter(t => t.id !== turmaId);
   }
 
-  // Lógica de Filtragem e Busca
   get turmasFiltradas(): Turma[] {
     let turmas = this.turmas;
 
-    // Filtro por turma (se o selectbox de turma for usado)
     if (this.filtroTurma) {
       turmas = turmas.filter(t => t.nome === this.filtroTurma);
     }
 
-    // Filtro por situação
     if (this.filtroSituacao) {
       turmas = turmas.map(turma => ({
         ...turma,
@@ -212,7 +251,6 @@ export class GerenciamentoUsuariosComponent implements OnInit {
       })).filter(t => t.usuarios.length > 0);
     }
 
-    // Busca por nome ou código de matrícula
     if (this.termoBusca.trim()) {
       const termo = this.termoBusca.trim().toLowerCase();
       turmas = turmas.map(turma => ({
@@ -226,10 +264,50 @@ export class GerenciamentoUsuariosComponent implements OnInit {
     return turmas;
   }
 
-  // Ações de usuário (simuladas)
   editarUsuario(usuario: Usuario): void {
-    console.log('Editar usuário:', usuario);
-    // Lógica para abrir modal de edição de usuário
+    const turma = this.turmas.find(t => t.usuarios.includes(usuario));
+    if (turma) {
+      this.usuarioParaEditar = usuario;
+      this.turmaDoUsuarioEditado = turma;
+      this.editarUsuarioForm = {
+        codigo: usuario.codigo,
+        nome: usuario.nome,
+        email: usuario.email,
+        situacao: usuario.situacao,
+        turmaId: turma.id
+      };
+
+      this.modalEditarUsuarioAberto = true;
+    }
+  }
+
+  fecharModalEditarUsuario(): void {
+    this.modalEditarUsuarioAberto = false;
+    this.usuarioParaEditar = null;
+    this.turmaDoUsuarioEditado = null;
+  }
+
+  salvarEdicaoUsuario(): void {
+    if (this.usuarioParaEditar && this.turmaDoUsuarioEditado) {
+      this.usuarioParaEditar.codigo = this.editarUsuarioForm.codigo;
+      this.usuarioParaEditar.nome = this.editarUsuarioForm.nome;
+      this.usuarioParaEditar.email = this.editarUsuarioForm.email;
+      this.usuarioParaEditar.situacao = this.editarUsuarioForm.situacao;
+
+      if (this.editarUsuarioForm.turmaId !== this.turmaDoUsuarioEditado.id) {
+        const novaTurma = this.turmas.find(t => t.id === this.editarUsuarioForm.turmaId);
+
+        if (novaTurma) {
+          this.turmaDoUsuarioEditado.usuarios = this.turmaDoUsuarioEditado.usuarios.filter(
+            u => u !== this.usuarioParaEditar
+          );
+
+          novaTurma.usuarios.push(this.usuarioParaEditar);
+        }
+      }
+
+      this.fecharModalEditarUsuario();
+    }
   }
 
   excluirUsuario(turma: Turma, usuario: Usuario): void {
@@ -237,7 +315,6 @@ export class GerenciamentoUsuariosComponent implements OnInit {
     console.log('Excluir usuário:', usuario);
   }
 
-  // Utilitários para o template
   get todasTurmas(): string[] {
     return this.turmas.map(t => t.nome);
   }

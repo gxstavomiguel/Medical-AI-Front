@@ -6,13 +6,12 @@ export interface RAGDocument {
 export interface PromptSection {
   id: number;
   name: string;
-  level: number; // 0 para Tema, 1 para Subtema, etc.
+  level: number;
   promptContent: string;
   ragDocuments: RAGDocument[];
   children: PromptSection[];
-
-  // Propriedades de estado da UI (para o componente)
   isExpanded: boolean;
+  isViewingDetails: boolean;
   isEditingName: boolean;
   isAddingChild: boolean;
   isConfiguringPrompt: boolean;

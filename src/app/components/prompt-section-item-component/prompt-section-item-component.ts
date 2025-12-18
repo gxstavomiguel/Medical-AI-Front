@@ -1,13 +1,13 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, NgModule } from '@angular/core';
+import { PromptSection } from '../../interfaces/prompt-section.interface';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { PromptSection } from '../../interfaces/prompt-section.interface';
 
 @Component({
   selector: 'app-prompt-section-item',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './prompt-section-item.component.html',
+  templateUrl: './prompt-section-item-component.html',
 })
 export class PromptSectionItemComponent {
   @Input({ required: true }) section!: PromptSection;
@@ -68,4 +68,10 @@ export class PromptSectionItemComponent {
   get isTheme(): boolean {
     return this.section.level === 0;
   }
+
+  toggleViewDetails() {
+    this.section.isViewingDetails = !this.section.isViewingDetails;
+  }
+
+
 }

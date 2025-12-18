@@ -4,6 +4,7 @@ html,
 body {
   height: 100%;
 }
+
 body {
   margin: 0;
   font-family: Roboto, 'Helvetica Neue', sans-serif;
@@ -21,5 +22,29 @@ input[type='password']::-webkit-password-toggle-button {
   appearance: none;
 }
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+
+.kpi-card {
+  @apply w-full max-w-full bg-white flex flex-col items-center justify-center p-4 rounded-lg min-w-0 transition-transform duration-150 hover:scale-[1.02] cursor-pointer;
+}
+
+.icone-default {
+  @apply object-contain;
+}
+
+.icone-users {
+  @apply object-contain scale-130;
+}
+
+.icone-reports {
+  @apply object-contain scale-160;
+}
