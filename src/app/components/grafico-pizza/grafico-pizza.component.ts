@@ -22,7 +22,17 @@ export class GraficoPizzaComponent implements OnInit {
   @Input() titulo: string = 'Distribuição por Tipo de Estudo';
   @Input() labels: string[] = ['Estudo A', 'Estudo B', 'Estudo C'];
   @Input() valores: number[] = [12.13, 22.4, 16.54];
-  @Input() cores: string[] = ['#4A6CF7', '#17B978', '#FFD700', '#FF6384', '#36A2EB'];
+  @Input() cores: string[] = [
+    // '#19AA79', // Verde principal
+    // '#8CCFB5', // Verde claro complementar
+    // '#3C7D66', // Verde profundo contrastante
+    // '#F4C67E', // Dourado suave (complementar quente, combina com verde)
+    // '#6FB8E6'  // Azul suave e harmônico
+    '#6FB8E6',
+    '#F4D06F',
+    '#8CCFB5',
+  ];
+
 
   public pieChartType: ChartType = 'doughnut';
 

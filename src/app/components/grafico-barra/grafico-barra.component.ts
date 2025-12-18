@@ -9,7 +9,7 @@ import { BaseChartDirective } from 'ng2-charts';
   templateUrl: './grafico-barra.component.html',
 })
 export class GraficoBarraComponent implements OnInit {
-  @Input() titulo: string = 'Gráfico de Barras';
+  @Input() titulo: string = 'Distribuição por Ferramenta';
   @Input() labels: string[] = [];
   @Input() valores: number[] = [];
   @Input() corPrimaria: string = '#4A6CF7';
@@ -49,7 +49,7 @@ export class GraficoBarraComponent implements OnInit {
           label: 'Dados',
           backgroundColor: this.corPrimaria,
           borderColor: this.corPrimaria,
-          hoverBackgroundColor: this.corPrimaria + 'B3', // 70% opacidade
+          hoverBackgroundColor: this.corPrimaria + 'B3',
           hoverBorderColor: this.corPrimaria,
         },
       ],
