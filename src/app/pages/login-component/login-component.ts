@@ -1,11 +1,12 @@
 import { Router } from '@angular/router';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login-component',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './login-component.html'
 })
 export class LoginComponent {
@@ -13,6 +14,8 @@ export class LoginComponent {
   mostrarSenha: boolean = false;
   sloganDinamico: string = 'Plataforma inteligente no ensino médico';
   novo_usuario: boolean = false;
+  loading: boolean = false;
+  errorMessage: string = '';
 
   constructor(
     private fb: FormBuilder,
@@ -29,14 +32,21 @@ export class LoginComponent {
     this.mostrarSenha = !this.mostrarSenha;
   }
 
-  onSubmit() {
-    if (this.loginForm.valid) {
-      const { login, password }: { login: string; password: string } = this.loginForm.value;
-      if (login.includes('@')) {
-        this.auth.login(login, password, 0);
-      } else {
-        this.auth.login('', password, login);
-      }
+  async onSubmit() {
+    if (this.loginForm.invalid || this.loading) return;
+
+    const { login, password } = this.loginForm.value;
+
+    this.loading = true;
+    this.errorMessage = '';
+    try {
+      await this.auth.login(login, password);
+    } catch (error: any) {
+      console.error('Erro ao logar', error);
+      this.errorMessage = error.message || 'Erro ao fazer login. Verifique suas credenciais.';
+    } finally {
+      this.loading = false;
     }
   }
+
 }

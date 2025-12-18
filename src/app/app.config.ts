@@ -6,11 +6,12 @@ import {
 import { provideRouter } from '@angular/router';
 import { MARKED_OPTIONS, provideMarkdown } from 'ngx-markdown';
 import { routes } from './app.routes';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { authInterceptor } from './guards/auth.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideHttpClient(),
+    provideHttpClient(withInterceptors([authInterceptor])),
     provideMarkdown({
       markedOptions: {
         useValue: {

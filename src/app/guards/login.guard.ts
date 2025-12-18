@@ -18,8 +18,8 @@ export class LoginGuard implements CanActivate {
     private auth: AuthService,
   ) { }
 
-  canActivate(): boolean {
-    if (this.auth.isLoggedIn()) {
+  async canActivate(): Promise<boolean> {
+    if (await this.auth.isLoggedIn()) {
       this.router.navigate(['/home']);
       return false;
     }

@@ -1,98 +1,64 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { jwtDecode } from 'jwt-decode';
-import { environment as env } from '../environments/environment';
+import { HttpClient } from '@angular/common/http';
+import { supabase } from '../core/supabase.client';
+import { environment } from '../environments/environment.supabase';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class AuthService {
-  constructor(
-    private router: Router,
-    private http: HttpClient,
-  ) { }
 
-  private tokenKey = 'authToken';
+  constructor(private router: Router, private http: HttpClient) { }
 
-  getToken() {
-    return localStorage.getItem(this.tokenKey);
-  }
+  async login(login: string, senha: string) {
+    const response = await this.http.post<{
+      access_token: string;
+      refresh_token: string;
+      user_id: string;
+      primeiro_acesso: boolean;
+    }>(`${environment.n8nUrl}/login`, { login, senha }).toPromise();
 
-  isLoggedIn(): boolean {
-    const token = this.getToken();
-    if (!token) return false;
+    if (!response) throw new Error('Login failed');
 
-    try {
-      const decoded: any = jwtDecode(token);
-      const exp = decoded.exp * 1000;
-      return Date.now() < exp;
-    } catch {
-      return false;
+    localStorage.setItem('usuario_id', response.user_id);
+
+    localStorage.setItem('authToken', response.access_token);
+
+    const { error } = await supabase.auth.setSession({
+      access_token: response.access_token,
+      refresh_token: response.refresh_token,
+    });
+
+    if (error) throw error;
+
+    if (response.primeiro_acesso) {
+      this.router.navigate(['/nova-senha']);
+    } else {
+      this.router.navigate(['/home']);
     }
   }
 
-  login(email: string, senha: string, codigo: number | string) {
-    this.http
-      .post<{ usuario_id: string; primeiro_acesso: boolean }>(
-        `${env.hostUrl}/c11135a5-41d6-43f4-a2ba-381d54a899b4`,
-        {
-          email,
-          senha,
-          codigo,
-        },
-      )
-      .subscribe({
-        next: (res) => {
-          localStorage.setItem('usuario_id', res.usuario_id);
-
-          this.generateToken({ id: res.usuario_id, email, codigo }).subscribe({
-            next: (tokenRes) => {
-              this.saveToken(tokenRes.token);
-              console.log('res:', res);
-              if (res.primeiro_acesso === true) {
-                this.router.navigate(['nova-senha']);
-              } else {
-                this.router.navigate(['dashboard']);
-              }
-            },
-          });
-        },
-        error: (err) => console.error('Erro no login', err),
-      });
-  }
-
-  novaSenha(senha: string) {
-    const usuario = localStorage.getItem('usuario_id');
-    console.log('teste', usuario);
-    const usuario_id = usuario;
-    return this.http.post(
-      // `${URL.authUrl}/alterar-senha`,
-      `${env.hostUrl}/c11135a5-41d6-43f4-a2ba-381d54a899b4/alterar-senha`,
-      { usuario_id, senha },
-      {
-        headers: {
-          Authorization: `Bearer ${this.getToken()}`,
-        },
-      },
-      // { Authorization: this.getToken() }
-    );
-  }
-
-  generateToken(payload: any) {
-    return this.http.post<{ token: string }>(
-      // 'http://localhost:5678/webhook/62edbe74-24ca-421a-b4f5-48e69d3053f4',
-      `${env.hostUrl}/62edbe74-24ca-421a-b4f5-48e69d3053f4`,
-      payload,
-    );
-  }
-
-  logout() {
+  async logout() {
+    await supabase.auth.signOut();
+    localStorage.removeItem('usuario_id');
     localStorage.removeItem('authToken');
     this.router.navigate(['/']);
   }
 
-  saveToken(token: string) {
-    localStorage.setItem(this.tokenKey, token);
+  async isLoggedIn(): Promise<boolean> {
+    const { data } = await supabase.auth.getSession();
+    return !!data.session;
+  }
+
+  async getToken(): Promise<string | null> {
+    const { data } = await supabase.auth.getSession();
+    return data.session?.access_token ?? null;
+  }
+
+  async atualizarSenha(novaSenha: string) {
+    const { error } = await supabase.auth.updateUser({
+      password: novaSenha,
+    });
+
+    if (error) throw error;
   }
 }

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { supabase } from '../../core/supabase.client';
 
 @Component({
   selector: 'app-nova-senha-component',
@@ -38,16 +39,21 @@ export class NovaSenhaComponent {
     this.mostrarConfirmarSenha = !this.mostrarConfirmarSenha;
   }
 
-  onSubmit() {
-    console.log('ASDASDASIHDOI');
-    if (this.newPasswordForm.valid) {
-      const { password, confirmPassword } = this.newPasswordForm.value;
-      if (password === confirmPassword) {
-        this.auth.novaSenha(password).subscribe({
-          next: () => console.log('Nova senha salva com sucesso'),
-        });
-        this.router.navigate(['dashboard']);
-      }
+  async onSubmit() {
+    if (this.newPasswordForm.invalid) return;
+
+    const { password, confirmPassword } = this.newPasswordForm.value;
+
+    if (password !== confirmPassword) return;
+
+    try {
+      await this.auth.atualizarSenha(password);
+      this.router.navigate(['dashboard']);
+    } catch (error) {
+      console.error('Erro ao atualizar senha', error);
     }
   }
+
+
+
 }
