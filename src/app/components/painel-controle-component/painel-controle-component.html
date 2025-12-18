@@ -22,7 +22,12 @@
       @for (btn of botoes; track btn.nome) {
       <button (click)="navegar(btn)" class="flex items-center gap-3 p-2 rounded transition-colors w-full h-12"
         [ngClass]="itemAtivo === btn.nome ? 'bg-gray-300' : 'hover:bg-gray-200'">
-        <img [src]="btn.icone" class="w-8 h-8 shrink-0" />
+        <img [src]="btn.icone" [ngClass]="[
+          sidebarAberta ? 'w-8 h-8' : 'w-12 h-12',
+          btn.classe
+        ]" class="shrink-0 object-contain" />
+
+
 
         @if (sidebarAberta) {
         <span class="text-sm font-medium flex-1 text-left block">
@@ -46,12 +51,11 @@
       </button>
     </div>
 
-    <div class="w-full bg-gray-100 text-black h-16 flex items-center px-6 border-b border-gray-300">
-      <h1 class="text-[22px] font-bold">{{ itemAtivo }}</h1>
+    <div class="w-full bg-gray-100 text-gray-900 h-16 flex items-center px-6 border-b border-gray-200">
+      <h1 class="text-[22px] font-semibold">{{ itemAtivo }}</h1>
     </div>
 
-    <div class="flex-1 bg-white p-6 overflow-auto">
-      <!-- <div class="flex-1 bg-white p-6"> -->
+    <div class="flex-1 bg-white overflow-auto">
       <router-outlet></router-outlet>
     </div>
   </div>

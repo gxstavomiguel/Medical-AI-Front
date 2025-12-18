@@ -2,7 +2,7 @@
 
 <div class="flex h-screen bg-gray-100 overflow-hidden relative">
   @if (sidebarService.isOpen()) {
-    <div class="fixed inset-0 bg-black/40 z-40 lg:hidden" (click)="sidebarService.close()"></div>
+  <div class="fixed inset-0 bg-black/40 z-40 lg:hidden" (click)="sidebarService.close()"></div>
   }
 
   <app-sidebar
@@ -11,8 +11,7 @@
       '-translate-x-full': !sidebarService.isOpen(),
       'translate-x-0': sidebarService.isOpen(),
       'lg:translate-x-0': true,
-    }"
-  ></app-sidebar>
+    }"></app-sidebar>
 
   <main class="flex-1 overflow-y-auto pt-16">
     <router-outlet></router-outlet>

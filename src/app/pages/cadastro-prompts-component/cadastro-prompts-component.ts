@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, JsonPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { PromptSectionItemComponent } from './prompt-section-item.component';
+import { PromptSectionItemComponent } from '../../components/prompt-section-item-component/prompt-section-item-component';
 import { PromptSection, RAGDocument } from '../../interfaces/prompt-section.interface';
 
 const MOCK_DATA: PromptSection[] = [
@@ -24,6 +24,7 @@ const MOCK_DATA: PromptSection[] = [
         ragDocuments: [],
         children: [],
         isExpanded: false,
+        isViewingDetails: false,
         isEditingName: false,
         isAddingChild: false,
         isConfiguringPrompt: false,
@@ -33,6 +34,7 @@ const MOCK_DATA: PromptSection[] = [
       },
       {
         id: 12,
+        isViewingDetails: false,
         name: 'Resumo científico',
         level: 1,
         promptContent: 'Lorem ipsum dolor sit amet consectetur. Facilisi elementum imperdiet elementum dolor. Tortor at integer sed duis nisl...',
@@ -48,6 +50,7 @@ const MOCK_DATA: PromptSection[] = [
       },
     ],
     isExpanded: true,
+    isViewingDetails: false,
     isEditingName: false,
     isAddingChild: false,
     isConfiguringPrompt: false,
@@ -77,6 +80,7 @@ export class CadastroPromptsComponent implements OnInit {
   currentSection: PromptSection | null = null;
 
   baseColor = 'bg-[#19AA79]';
+  baseColorBackground = 'bg-[#ECECED]';
   baseColorHover = 'hover:bg-[#158a62]';
 
   ngOnInit(): void {
@@ -112,6 +116,7 @@ export class CadastroPromptsComponent implements OnInit {
       ragDocuments: [],
       children: [],
       isExpanded: true,
+      isViewingDetails: false,
       isEditingName: true,
       isAddingChild: false,
       isConfiguringPrompt: false,
@@ -126,13 +131,14 @@ export class CadastroPromptsComponent implements OnInit {
     parent.children.forEach(child => child.isAddingChild = false);
 
     const newChild: PromptSection = {
-      id: 0, // ID temporário
+      id: 0,
       name: '',
       level: parent.level + 1,
       promptContent: '',
       ragDocuments: [],
       children: [],
       isExpanded: true,
+      isViewingDetails: false,
       isEditingName: true,
       isAddingChild: false,
       isConfiguringPrompt: false,
@@ -261,7 +267,6 @@ export class CadastroPromptsComponent implements OnInit {
     return `pl-${level * 4}`;
   }
 
-  // Método para salvar os arquivos RAG
   saveRAGFiles() {
 
   }

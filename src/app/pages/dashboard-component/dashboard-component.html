@@ -1,67 +1,100 @@
-<div class="bg-pink-300 w-full h-[10vh]">
-
-  <div ngComboBox readonly>
-
-    <div #origin class="select">
-
-      <span class="combobox-label">
-
-        <span class="selected-label-icon material-symbols-outlined" translate="no"></span>
-        <span class="selected-label-text"></span>
-      </span>
-
+<div class="w-full h-full p-4">
+  <div class="flex items-center mb-3 px-2">
+    <select class="ml-auto text-base border border-gray-200 pl-4 pr-12 py-2.5 rounded-md bg-white cursor-pointer"
+      style="text-align: left;">
+      <option value="a">Crescimento</option>
+      <option value="b">Acessos</option>
+    </select>
+  </div>
+  p-4 border border-gray-200 rounded-lg bg-white mx-2" style="width: calc(100% - 1rem);">
+  <div class="kpi-card">
+    <div class="flex items-center gap-2 w-full min-w-0 justify-center">
+      <img class="w-8 h-8 shrink-0" src="assets/users-colored.svg" alt="Usuários" />
+      <span class="text-lg font-medium text-gray-800 truncate min-w-0">530</span>
     </div>
-
+    <p class="mt-2 text-gray-700 text-sm sm:text-base text-center truncate w-full">Qtd. users</p>
+  </div>
+  <div class="kpi-card">
+    <div class="flex items-center gap-2 w-full min-w-0 justify-center">
+      <img class="w-13 h-13 shrink-0" src="assets/reports-sidebar.svg" />
+      <span class="text-lg font-medium text-gray-800 truncate min-w-0"> Ferramenta mais utilizada </span>
+    </div>
+    <p class="mt-2 text-gray-700 text-sm sm:text-base text-center truncate w-full">
+      Ferramenta mais utilizada
+    </p>
   </div>
 
+  <div class="kpi-card">
+    <div class="flex items-center gap-2 w-full min-w-0 justify-center">
+      <img class="w-8 h-8 shrink-0" src="assets/subindo.png" alt="Subindo" />
+      <span class="text-lg font-medium text-gray-800 truncate min-w-0">55%</span>
+    </div>
+    <p class="mt-2 text-gray-700 text-sm sm:text-base text-center truncate w-full">
+      Solicitações
+    </p>
+  </div>
+
+  <div class="kpi-card">
+    <div class="flex items-center gap-2 w-full min-w-0 justify-center">
+      <img class="w-8 h-8 shrink-0 rotate-180" src="assets/descendo.png" />
+      <span class="text-lg font-medium text-gray-800 truncate min-w-0">55%</span>
+    </div>
+    <p class="mt-2 text-gray-700 text-sm sm:text-base text-center truncate w-full">
+      Usuários ativos
+    </p>
+  </div>
 </div>
 
-<div class="w-full h-full p-4">
-  <div
-    class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 w-full p-4 border border-gray-300 rounded-lg bg-white">
-    <div class="w-full max-w-full bg-white flex flex-col items-center justify-center p-4 rounded-lg min-w-0">
-      <div class="flex items-center gap-2 w-full min-w-0 justify-center">
-        <img class="w-8 h-8 shrink-0" src="assets/usuarios.png" alt="Usuários" />
-        <span class="text-lg font-semibold truncate min-w-0">530</span>
-      </div>
-      <p class="mt-2 text-gray-700 text-sm sm:text-base text-center truncate w-full">Qtd. users</p>
+<div class="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mx-2" style="width: calc(100% - 1rem);">
+  <div class="kpi-card p-4 border border-gray-200 rounded-lg bg-white shadow-sm hover:shadow-md transition-all">
+    <div class="flex items-center gap-2 justify-center">
+      <img class="w-8 h-8 shrink-0" src="assets/users-colored.svg" alt="Usuários" />
+      <span class="text-lg font-medium text-gray-800">530</span>
     </div>
-
-    <div class="w-full max-w-full bg-white flex flex-col items-center justify-center p-4 rounded-lg min-w-0">
-      <div class="flex items-center gap-2 w-full min-w-0 justify-center">
-        <img class="w-8 h-8 shrink-0" src="assets/relatorio.png" />
-        <span class="text-lg font-semibold truncate min-w-0"> Ferramenta mais utilizada </span>
-      </div>
-      <p class="mt-2 text-gray-700 text-sm sm:text-base text-center truncate w-full">
-        Ferramenta mais utilizada
-      </p>
-    </div>
-
-    <div class="w-full max-w-full bg-white flex flex-col items-center justify-center p-4 rounded-lg min-w-0">
-      <div class="flex items-center gap-2 w-full min-w-0 justify-center">
-        <img class="w-8 h-8 shrink-0" src="assets/subindo.png" alt="Subindo" />
-        <span class="text-lg font-semibold truncate min-w-0">55%</span>
-      </div>
-      <p class="mt-2 text-gray-700 text-sm sm:text-base text-center truncate w-full">
-        Solicitações
-      </p>
-    </div>
-
-    <div class="w-full max-w-full bg-white flex flex-col items-center justify-center p-4 rounded-lg min-w-0">
-      <div class="flex items-center gap-2 w-full min-w-0 justify-center">
-        <img class="w-8 h-8 shrink-0 rotate-180" src="assets/descendo.png" />
-        <span class="text-lg font-semibold truncate min-w-0">55%</span>
-      </div>
-      <p class="mt-2 text-gray-700 text-sm sm:text-base text-center truncate w-full">
-        Usuários ativos
-      </p>
-    </div>
+    <p class="mt-2 text-gray-700 text-sm sm:text-base text-center">
+      Qtd. users
+    </p>
   </div>
 
-  <div class="w-full mt-10 pb-10">
+  <div class="kpi-card p-4 border border-gray-200 rounded-lg bg-white shadow-sm hover:shadow-md transition-all">
+    <div class="flex items-center gap-2 justify-center">
+      <img class="w-10 h-10 shrink-0" src="assets/reports-sidebar.svg" />
+      <span class="text-lg font-medium text-gray-800 truncate">
+        Ferramenta
+      </span>
+    </div>
+    <p class="mt-2 text-gray-700 text-sm sm:text-base text-center truncate">
+      Ferramenta mais utilizada
+    </p>
+  </div>
 
+  <div class="kpi-card p-4 border border-gray-200 rounded-lg bg-white shadow-sm hover:shadow-md transition-all">
+    <div class="flex items-center gap-2 justify-center">
+      <img class="w-8 h-8 shrink-0" src="assets/subindo.png" alt="Subindo" />
+      <span class="text-lg font-medium text-gray-800">55%</span>
+    </div>
+    <p class="mt-2 text-gray-700 text-sm sm:text-base text-center">
+      Solicitações
+    </p>
+  </div>
+
+  <div class="kpi-card p-4 border border-gray-200 rounded-lg bg-white shadow-sm hover:shadow-md transition-all">
+    <div class="flex items-center gap-2 justify-center">
+      <img class="w-8 h-8 shrink-0 rotate-180" src="assets/descendo.png" />
+      <span class="text-lg font-medium text-gray-800">55%</span>
+    </div>
+    <p class="mt-2 text-gray-700 text-sm sm:text-base text-center">
+      Usuários ativos
+    </p>
+  </div>
+</div>
+
+
+<div class="w-full mt-10 pb-10">
+  <div class="w-full h-full flex flex-col p-2">
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-10 w-full">
-      <div class="w-full h-[300px] sm:h-[350px] bg-white border border-gray-300 rounded-lg">
+      <div
+        class="w-full h-[300px] sm:h-[350px] bg-white border border-gray-200  rounded-lg shadow-sm hover:shadow-md transition-shadow">
         <app-grafico-line titulo="Evolução de Solicitações" [labels]="[
             'Jan',
             'Fev',
@@ -75,10 +108,12 @@
             'Out',
             'Nov',
             'Dez',
-          ]" [valores]="[42, 55, 48, 60, 45, 70, 62, 53, 49, 65, 59, 72]" corPrimaria="#4A6CF7">
+          ]" [valores]="[42, 55, 48, 60, 45, 70, 62, 53, 49, 65, 59, 72]" corPrimaria="#19AA79">
         </app-grafico-line>
       </div>
-      <div class="w-full h-[300px] sm:h-[350px] bg-white border border-gray-300 rounded-lg">
+
+      <div
+        class="w-full h-[300px] sm:h-[350px] bg-white border border-gray-200  rounded-lg shadow-sm hover:shadow-md transition-shadow">
         <app-grafico-line titulo="Crescimento de Usuários" [labels]="[
             'Jan',
             'Fev',
@@ -92,26 +127,25 @@
             'Out',
             'Nov',
             'Dez',
-          ]" [valores]="[10, 20, 30, 65, 45, 70, 62, 53, 9, 35, 29, 92]" corPrimaria="#4A6CF7">
+          ]" [valores]="[10, 20, 30, 65, 45, 70, 62, 53, 9, 35, 29, 92]" corPrimaria="#19AA79">
         </app-grafico-line>
       </div>
 
-      <div class="w-full h-[300px] sm:h-[350px] bg-white border border-gray-300 rounded-lg">
+      <div
+        class="w-full h-[300px] sm:h-[350px] bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow">
         <app-grafico-barra [labels]="['Figma', 'Sketch', 'XD', 'PS', 'AI']"
-          [valores]="[38.07, 69.78, 84.4, 79.96, 52.98]" corPrimaria="#cf9bcc"></app-grafico-barra>
+          [valores]="[38.07, 69.78, 84.4, 79.96, 52.98]" corPrimaria="#19AA79"></app-grafico-barra>
+        <!-- #6FB8E6 -->
       </div>
 
-      <div class="w-full h-[300px] sm:h-[350px] bg-white border border-gray-300 rounded-lg">
+      <div
+        class="w-full h-[300px] sm:h-[350px] bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow">
         <app-grafico-pizza></app-grafico-pizza>
       </div>
 
-      <div id="problematica" class="col-span-1 sm:col-span-2 w-full bg-white border border-gray-300 rounded-lg p-4
-            flex flex-col gap-6 min-w-0">
-
-        <div class="w-full flex flex-col gap-4 min-w-0">
-          <app-tendencia-mensal-container class="w-full min-w-0 wrap-break-words"></app-tendencia-mensal-container>
-        </div>
-
+      <div class="col-span-1 sm:col-span-2 w-full border border-gray-200 rounded-lg
+            flex flex-col gap-6 min-w-0 shadow-sm hover:shadow-md transition-shadow">
+        <app-tendencia-mensal-container class="w-full"></app-tendencia-mensal-container>
       </div>
 
 
