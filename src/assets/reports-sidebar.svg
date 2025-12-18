@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet">
+  <defs>
+    <style>
+      .icon-path {
+        fill: none;
+        stroke: #19AA79;
+        stroke-width: 3;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      .icon-fill {
+        fill: #19AA79;
+      }
+    </style>
+  </defs>
+
+  <g transform="translate(0,5)">
+    <!-- Documento -->
+    <path d="M 30,20 L 30,75 L 70,75 L 70,38 L 52,20 Z" class="icon-path" />
+    <path d="M 52,20 L 52,38 L 70,38" class="icon-path" />
+
+    <!-- Linhas -->
+    <line x1="38" y1="45" x2="62" y2="45" class="icon-path" />
+    <line x1="38" y1="53" x2="58" y2="53" class="icon-path" />
+
+    <!-- Check -->
+    <circle cx="50" cy="65" r="10" class="icon-fill" opacity="0.2" />
+    <polyline points="45,65 49,69 56,61" class="icon-path" />
+  </g>
+</svg>

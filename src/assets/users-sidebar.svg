@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet">
+  <defs>
+    <style>
+      .icon-path {
+        fill: none;
+        stroke: #19AA79;
+        stroke-width: 3;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      .icon-fill-light {
+        fill: #19AA79;
+        opacity: 0.4;
+      }
+
+      .icon-fill-dark {
+        fill: #19AA79;
+        opacity: 0.9;
+      }
+    </style>
+  </defs>
+
+  <g transform="translate(0,5)">
+    <!-- Usuário pequeno -->
+    <circle cx="30" cy="30" r="12" class="icon-fill-light" />
+    <circle cx="30" cy="30" r="12" class="icon-path" />
+    <path d="M 15,65 Q 15,47 30,47 Q 45,47 45,65" class="icon-fill-light" />
+    <path d="M 15,65 Q 15,47 30,47 Q 45,47 45,65" class="icon-path" />
+
+    <!-- Usuário grande -->
+    <circle cx="60" cy="40" r="14" class="icon-fill-dark" />
+    <circle cx="60" cy="40" r="14" class="icon-path" />
+    <path d="M 42,80 Q 42,60 60,60 Q 78,60 78,80" class="icon-fill-dark" />
+    <path d="M 42,80 Q 42,60 60,60 Q 78,60 78,80" class="icon-path" />
+  </g>
+</svg>

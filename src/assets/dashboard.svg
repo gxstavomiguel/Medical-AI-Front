@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="10 15 70 70" preserveAspectRatio="xMidYMid meet">
+  <defs>
+    <style>
+      .icon-path {
+        fill: none;
+        stroke: #19AA79;
+        stroke-width: 1.8;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      .icon-fill {
+        fill: #19AA79;
+      }
+
+      .icon-fill-light {
+        fill: #19AA79;
+        opacity: 0.4;
+      }
+
+      .icon-fill-medium {
+        fill: #19AA79;
+        opacity: 0.6;
+      }
+
+      .icon-fill-dark {
+        fill: #19AA79;
+        opacity: 0.9;
+      }
+    </style>
+  </defs>
+
+  <rect x="15" y="55" width="12" height="30" class="icon-fill-light" />
+  <rect x="32" y="40" width="12" height="45" class="icon-fill-medium" />
+  <rect x="49" y="25" width="12" height="60" class="icon-fill-dark" />
+  <rect x="66" y="45" width="12" height="40" class="icon-fill-medium" />
+
+  <polyline points="21,52 38,37 55,22 72,42" class="icon-path" />
+  <circle cx="21" cy="52" r="3" class="icon-fill" />
+  <circle cx="38" cy="37" r="3" class="icon-fill" />
+  <circle cx="55" cy="22" r="3" class="icon-fill" />
+  <circle cx="72" cy="42" r="3" class="icon-fill" />
+</svg>
