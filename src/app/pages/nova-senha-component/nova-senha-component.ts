@@ -1,34 +1,37 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
-import { supabase } from '../../core/supabase.client';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-nova-senha-component',
-  imports: [ReactiveFormsModule],
-  templateUrl: './nova-senha-component.html'
+  imports: [ReactiveFormsModule, CommonModule],
+  templateUrl: './nova-senha-component.html',
 })
-export class NovaSenhaComponent {
+export class NovaSenhaComponent implements OnInit {
   newPasswordForm: FormGroup;
-  login: string = '';
   mostrarSenha: boolean = false;
   mostrarConfirmarSenha: boolean = false;
+  errorMessage: string = '';
+  loading: boolean = false;
 
   constructor(
     private fb: FormBuilder,
     private router: Router,
     private auth: AuthService,
-    private route: ActivatedRoute,
   ) {
-    this.route.queryParams.subscribe((params) => {
-      this.login = params['login'];
-    });
-
     this.newPasswordForm = this.fb.group({
       password: ['', [Validators.required, Validators.minLength(8)]],
-      confirmPassword: ['', Validators.required],
+      confirmPassword: ['', [Validators.required, Validators.minLength(8)]],
     });
+  }
+
+  ngOnInit() {
+    if (!this.auth.requiresPasswordChange()) {
+      console.log('⚠️ Usuário não precisa trocar senha. Redirecionando...');
+      this.router.navigate(['/home']);
+    }
   }
 
   toggleSenha() {
@@ -40,20 +43,29 @@ export class NovaSenhaComponent {
   }
 
   async onSubmit() {
-    if (this.newPasswordForm.invalid) return;
+    if (this.newPasswordForm.invalid || this.loading) return;
 
     const { password, confirmPassword } = this.newPasswordForm.value;
 
-    if (password !== confirmPassword) return;
+    if (password !== confirmPassword) {
+      this.errorMessage = 'As senhas não coincidem';
+      return;
+    }
+
+    this.loading = true;
+    this.errorMessage = '';
 
     try {
       await this.auth.atualizarSenha(password);
-      this.router.navigate(['dashboard']);
-    } catch (error) {
+
+      localStorage.removeItem('requires_password_change');
+
+      this.router.navigate(['/home']);
+    } catch (error: any) {
       console.error('Erro ao atualizar senha', error);
+      this.errorMessage = error.message || 'Erro ao atualizar senha. Tente novamente.';
+    } finally {
+      this.loading = false;
     }
   }
-
-
-
 }

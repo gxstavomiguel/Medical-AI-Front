@@ -1,6 +1,10 @@
 <div class="relative flex h-screen items-center justify-center w-full bg-white">
   <div class="w-full max-w-sm p-6 flex flex-col justify-between h-full">
-    <form (ngSubmit)="onSubmit()" [formGroup]="loginForm" class="flex flex-col justify-between h-full">
+    <form
+      (ngSubmit)="onSubmit()"
+      [formGroup]="loginForm"
+      class="flex flex-col justify-between h-full"
+    >
       <div class="flex flex-col items-center justify-center grow">
         <img src="assets/logo.png" alt="Logo" class="mb-4" />
         <p class="text-center text-[#19AA79] text-sm">{{ sloganDinamico }}</p>
@@ -8,19 +12,53 @@
 
       <div class="flex flex-col">
         <div>
-          <input id="login" type="text" formControlName="login"
+          <input
+            id="login"
+            type="text"
+            formControlName="login"
             class="placeholder-[#9E9E9E] mb-3 block w-full h-14 rounded-lg border border-[#AEC8D4] px-4 py-2 focus:outline-0 focus:border-[#007CD6]"
-            placeholder="E-mail ou código de matrícula" />
+            [class.border-red-500]="
+              loginForm.get('login')?.invalid && loginForm.get('login')?.touched
+            "
+            placeholder="Digite seu e-mail ou código"
+          />
+          <div
+            *ngIf="loginForm.get('login')?.invalid && loginForm.get('login')?.touched"
+            class="text-red-500 text-xs mb-2 -mt-2"
+          >
+            Por favor, insira seu e-mail ou código
+          </div>
         </div>
 
         <div class="relative w-full">
-          <input [type]="mostrarSenha ? 'text' : 'password'" formControlName="password" placeholder="Digite sua senha"
-            class="placeholder-[#9E9E9E] mb-3 block w-full h-14 rounded-lg border border-[#AEC8D4] px-4 pr-11 py-2 focus:outline-0 focus:border-[#007CD6]" />
+          <input
+            [type]="mostrarSenha ? 'text' : 'password'"
+            formControlName="password"
+            placeholder="Digite sua senha"
+            class="placeholder-[#9E9E9E] mb-3 block w-full h-14 rounded-lg border border-[#AEC8D4] px-4 pr-11 py-2 focus:outline-0 focus:border-[#007CD6]"
+            [class.border-red-500]="
+              loginForm.get('password')?.invalid && loginForm.get('password')?.touched
+            "
+          />
 
-          <button type="button" (click)="toggleSenha()" class="absolute inset-y-0 mb-3 right-0 px-3 flex items-center"
-            aria-label="Alternar visibilidade da senha">
-            <img [src]="mostrarSenha ? 'assets/senhavisivel.png' : 'assets/senhanaovisivel.png'" alt="Alternar senha" />
+          <button
+            type="button"
+            (click)="toggleSenha()"
+            class="absolute inset-y-0 mb-3 right-0 px-3 flex items-center"
+            aria-label="Alternar visibilidade da senha"
+          >
+            <img
+              [src]="mostrarSenha ? 'assets/senhavisivel.png' : 'assets/senhanaovisivel.png'"
+              alt="Alternar senha"
+            />
           </button>
+        </div>
+
+        <div
+          *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
+          class="text-red-500 text-xs mb-2 -mt-2"
+        >
+          A senha deve ter no mínimo 8 caracteres
         </div>
 
         <div class="flex mb-5 text-sm text-[#9E9E9E]">
@@ -29,12 +67,24 @@
           <a href="#" class="hover:underline focus:text-[#19AA79]">Esqueceu a senha?</a>
         </div>
 
-        <div *ngIf="errorMessage" class="mb-3 text-red-500 text-sm">
-          {{ errorMessage }}
+        <div *ngIf="errorMessage" class="mb-3 p-3 bg-red-50 border border-red-200 rounded-lg">
+          <p class="text-red-600 text-sm font-medium">{{ errorMessage }}</p>
+          <p
+            *ngIf="attemptsRemaining !== null && attemptsRemaining > 0"
+            class="text-red-500 text-xs mt-1"
+          >
+            ⚠️ {{ attemptsRemaining }} tentativa(s) restante(s) antes do bloqueio
+          </p>
+          <p *ngIf="attemptsRemaining === 0" class="text-red-700 text-xs mt-1 font-semibold">
+            🚫 Próxima tentativa incorreta bloqueará sua conta por 15 minutos
+          </p>
         </div>
 
-        <button type="submit" [disabled]="loading"
-          class="w-full h-14 rounded-4xl bg-[#19AA79] py-2 text-white font-semibold hover:bg-[#00AA79] transition disabled:opacity-50 disabled:cursor-not-allowed">
+        <button
+          type="submit"
+          [disabled]="loginForm.invalid || loading"
+          class="w-full h-14 rounded-4xl bg-[#19AA79] py-2 text-white font-semibold hover:bg-[#00AA79] transition disabled:opacity-50 disabled:cursor-not-allowed"
+        >
           {{ loading ? 'Entrando...' : 'Entrar' }}
         </button>
       </div>

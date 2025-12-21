@@ -7,7 +7,7 @@ import { AuthService } from '../../services/auth.service';
 @Component({
   selector: 'app-login-component',
   imports: [ReactiveFormsModule, CommonModule],
-  templateUrl: './login-component.html'
+  templateUrl: './login-component.html',
 })
 export class LoginComponent {
   loginForm: FormGroup;
@@ -16,6 +16,7 @@ export class LoginComponent {
   novo_usuario: boolean = false;
   loading: boolean = false;
   errorMessage: string = '';
+  attemptsRemaining: number | null = null;
 
   constructor(
     private fb: FormBuilder,
@@ -24,7 +25,7 @@ export class LoginComponent {
   ) {
     this.loginForm = this.fb.group({
       login: ['', [Validators.required]],
-      password: ['', Validators.required],
+      password: ['', [Validators.required, Validators.minLength(8)]],
     });
   }
 
@@ -39,14 +40,20 @@ export class LoginComponent {
 
     this.loading = true;
     this.errorMessage = '';
+    this.attemptsRemaining = null;
+
     try {
       await this.auth.login(login, password);
     } catch (error: any) {
       console.error('Erro ao logar', error);
+
+      if (error.error?.error?.attempts_remaining !== undefined) {
+        this.attemptsRemaining = error.error.error.attempts_remaining;
+      }
+
       this.errorMessage = error.message || 'Erro ao fazer login. Verifique suas credenciais.';
     } finally {
       this.loading = false;
     }
   }
-
 }

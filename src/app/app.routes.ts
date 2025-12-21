@@ -7,9 +7,9 @@ import { HomeComponent } from './pages/home-component/home-component';
 import { LayoutHomeComponent } from './components/layout-home-component/layout-home-component';
 import { PainelControleComponent } from './components/painel-controle-component/painel-controle-component';
 import { authGuard, publicGuard } from './guards/auth.guard';
+import { changePasswordGuard } from './guards/change-password.guard';
 
 export const routes: Routes = [
-
   {
     path: '',
     component: LoginComponent,
@@ -19,15 +19,14 @@ export const routes: Routes = [
   {
     path: 'nova-senha',
     component: NovaSenhaComponent,
+    canActivate: [changePasswordGuard],
   },
 
   {
     path: '',
     component: LayoutHomeComponent,
     canActivate: [authGuard],
-    children: [
-      { path: 'home', component: HomeComponent },
-    ],
+    children: [{ path: 'home', component: HomeComponent }],
   },
 
   {
@@ -40,29 +39,33 @@ export const routes: Routes = [
       {
         path: 'dashboard',
         loadComponent: () =>
-          import('./pages/dashboard-component/dashboard-component')
-            .then(m => m.DashboardComponent),
+          import('./pages/dashboard-component/dashboard-component').then(
+            (m) => m.DashboardComponent,
+          ),
       },
 
       {
         path: 'cadastro-prompts',
         loadComponent: () =>
-          import('./pages/cadastro-prompts-component/cadastro-prompts-component')
-            .then(m => m.CadastroPromptsComponent),
+          import('./pages/cadastro-prompts-component/cadastro-prompts-component').then(
+            (m) => m.CadastroPromptsComponent,
+          ),
       },
 
       {
         path: 'gerenciamento-usuarios',
         loadComponent: () =>
-          import('./pages/gerenciamento-usuarios-component/gerenciamento-usuarios-component')
-            .then(m => m.GerenciamentoUsuariosComponent),
+          import('./pages/gerenciamento-usuarios-component/gerenciamento-usuarios-component').then(
+            (m) => m.GerenciamentoUsuariosComponent,
+          ),
       },
 
       {
         path: 'gerar-relatorios',
         loadComponent: () =>
-          import('./pages/gerar-relatorios-component/gerar-relatorios-component')
-            .then(m => m.GerarRelatoriosComponent),
+          import('./pages/gerar-relatorios-component/gerar-relatorios-component').then(
+            (m) => m.GerarRelatoriosComponent,
+          ),
       },
     ],
   },
