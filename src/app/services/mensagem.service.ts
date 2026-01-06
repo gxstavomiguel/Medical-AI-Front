@@ -9,7 +9,7 @@ import { environment as env } from '../environments/environment';
   providedIn: 'root',
 })
 export class MensagemService {
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   enviarMensagem(texto: string, foi_usuario: boolean, horario: string, imagem?: string) {
     const payload = {
@@ -19,15 +19,11 @@ export class MensagemService {
       imagem: imagem || '',
       foi_usuario,
     };
-    return this.http.post(
-      `${env.hostUrl}/f9689d3b-cb0e-435d-b8b7-120c61ddff4b`,
-      payload,
-      {
-        headers: {
-          Authorization: getHeaderToken(),
-        },
+    return this.http.post(`${env.hostUrl}/f9689d3b-cb0e-435d-b8b7-120c61ddff4b`, payload, {
+      headers: {
+        Authorization: getHeaderToken(),
       },
-    );
+    });
   }
 
   enviarPrompt(texto: string, modo?: 'MODO 1' | 'MODO 2' | 'MODO 3') {
@@ -37,8 +33,6 @@ export class MensagemService {
       modo,
       // modo: 'MODO 2',
     };
-
-    console.log('Prompt enviado: ', payload);
 
     return this.http.post<PromptOutput>(
       `${env.hostUrl}/f217499f-9fa2-46e8-9283-540736845070`,
