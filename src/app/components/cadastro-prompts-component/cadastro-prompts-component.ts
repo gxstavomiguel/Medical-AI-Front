@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { CommonModule, JsonPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { PromptSectionItemComponent } from '../../components/prompt-section-item-component/prompt-section-item-component';
+import { PromptSectionItemComponent } from '../prompt-section-item-component/prompt-section-item-component';
 import { PromptSection, RAGDocument } from '../../interfaces/prompt-section.interface';
 
 const MOCK_DATA: PromptSection[] = [
@@ -9,7 +9,8 @@ const MOCK_DATA: PromptSection[] = [
     id: 1,
     name: 'Casos Clínicos',
     level: 0,
-    promptContent: 'Lorem ipsum dolor sit amet consectetur. Facilisi elementum imperdiet elementum dolor. Tortor at integer sed duis nisl...',
+    promptContent:
+      'Lorem ipsum dolor sit amet consectetur. Facilisi elementum imperdiet elementum dolor. Tortor at integer sed duis nisl...',
     ragDocuments: [
       { id: 101, name: 'Documento 1' },
       { id: 102, name: 'Documento 2' },
@@ -20,7 +21,8 @@ const MOCK_DATA: PromptSection[] = [
         id: 11,
         name: 'Resumo de Caso para Discussão',
         level: 1,
-        promptContent: 'Lorem ipsum dolor sit amet consectetur. Facilisi elementum imperdiet elementum dolor. Tortor at integer sed duis nisl...',
+        promptContent:
+          'Lorem ipsum dolor sit amet consectetur. Facilisi elementum imperdiet elementum dolor. Tortor at integer sed duis nisl...',
         ragDocuments: [],
         children: [],
         isExpanded: false,
@@ -37,7 +39,8 @@ const MOCK_DATA: PromptSection[] = [
         isViewingDetails: false,
         name: 'Resumo científico',
         level: 1,
-        promptContent: 'Lorem ipsum dolor sit amet consectetur. Facilisi elementum imperdiet elementum dolor. Tortor at integer sed duis nisl...',
+        promptContent:
+          'Lorem ipsum dolor sit amet consectetur. Facilisi elementum imperdiet elementum dolor. Tortor at integer sed duis nisl...',
         ragDocuments: [],
         children: [],
         isExpanded: false,
@@ -64,11 +67,10 @@ const MOCK_DATA: PromptSection[] = [
   selector: 'app-cadastro-prompts',
   standalone: true,
   imports: [CommonModule, FormsModule, PromptSectionItemComponent],
-  templateUrl: './cadastro-prompts-component.html'
-
+  templateUrl: './cadastro-prompts-component.html',
 })
 export class CadastroPromptsComponent implements OnInit {
-
+  isMobile: boolean = false;
   editablePrompt: string = '';
   promptFiles: File[] = [];
   promptSections: PromptSection[] = [];
@@ -84,7 +86,19 @@ export class CadastroPromptsComponent implements OnInit {
   baseColorHover = 'hover:bg-[#158a62]';
 
   ngOnInit(): void {
-    this.promptSections = MOCK_DATA.map(section => this.initializeSection(section));
+    this.checkIfMobile();
+    this.promptSections = MOCK_DATA.map((section) => this.initializeSection(section));
+  }
+
+  @HostListener('window:resize')
+  onResize(): void {
+    this.checkIfMobile();
+  }
+
+  private checkIfMobile(): void {
+    if (typeof window !== 'undefined') {
+      this.isMobile = window.innerWidth < 768;
+    }
   }
 
   private initializeSection(section: PromptSection): PromptSection {
@@ -95,7 +109,7 @@ export class CadastroPromptsComponent implements OnInit {
     section.isConfiguringRAG = section.isConfiguringRAG ?? false;
     section.newChildName = section.newChildName ?? '';
     section.newPromptContent = section.newPromptContent ?? section.promptContent;
-    section.children = section.children.map(child => this.initializeSection(child));
+    section.children = section.children.map((child) => this.initializeSection(child));
     return section;
   }
 
@@ -104,7 +118,7 @@ export class CadastroPromptsComponent implements OnInit {
   }
 
   addNewTheme(): void {
-    if (this.promptSections.some(s => s.isEditingName && s.id === 0)) {
+    if (this.promptSections.some((s) => s.isEditingName && s.id === 0)) {
       return;
     }
 
@@ -128,7 +142,7 @@ export class CadastroPromptsComponent implements OnInit {
   }
 
   addChildSection(parent: PromptSection): void {
-    parent.children.forEach(child => child.isAddingChild = false);
+    parent.children.forEach((child) => (child.isAddingChild = false));
 
     const newChild: PromptSection = {
       id: 0,
@@ -168,26 +182,28 @@ export class CadastroPromptsComponent implements OnInit {
     }
   }
 
-  cancelEditName(event: { section: PromptSection, parent: PromptSection | null }): void {
+  cancelEditName(event: { section: PromptSection; parent: PromptSection | null }): void {
     const { section, parent } = event;
     if (section.id === 0) {
       if (parent) {
-        parent.children = parent.children.filter(c => c !== section);
+        parent.children = parent.children.filter((c) => c !== section);
       } else {
-        this.promptSections = this.promptSections.filter(s => s !== section);
+        this.promptSections = this.promptSections.filter((s) => s !== section);
       }
     } else {
       section.isEditingName = false;
     }
   }
 
-  deleteSection(event: { section: PromptSection, parent: PromptSection | null }): void {
+  deleteSection(event: { section: PromptSection; parent: PromptSection | null }): void {
     const { section, parent } = event;
-    if (confirm(`Tem certeza que deseja excluir a seção "${section.name}" e todos os seus subtemas?`)) {
+    if (
+      confirm(`Tem certeza que deseja excluir a seção "${section.name}" e todos os seus subtemas?`)
+    ) {
       if (parent) {
-        parent.children = parent.children.filter(c => c.id !== section.id);
+        parent.children = parent.children.filter((c) => c.id !== section.id);
       } else {
-        this.promptSections = this.promptSections.filter(s => s.id !== section.id);
+        this.promptSections = this.promptSections.filter((s) => s.id !== section.id);
       }
     }
   }
@@ -235,14 +251,16 @@ export class CadastroPromptsComponent implements OnInit {
 
   deleteRAGDocument(doc: RAGDocument): void {
     if (this.currentSection) {
-      this.currentSection.ragDocuments = this.currentSection.ragDocuments.filter(d => d.id !== doc.id);
+      this.currentSection.ragDocuments = this.currentSection.ragDocuments.filter(
+        (d) => d.id !== doc.id,
+      );
     }
   }
 
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0 && this.currentSection) {
-      Array.from(input.files).forEach(file => {
+      Array.from(input.files).forEach((file) => {
         const newDoc: RAGDocument = {
           id: this.nextId++,
           name: file.name,
@@ -267,12 +285,7 @@ export class CadastroPromptsComponent implements OnInit {
     return `pl-${level * 4}`;
   }
 
-  saveRAGFiles() {
+  saveRAGFiles() {}
 
-  }
-
-  onOpenViewMore(): void {
-
-  }
-
+  onOpenViewMore(): void {}
 }

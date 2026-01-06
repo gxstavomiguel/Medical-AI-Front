@@ -1,8 +1,8 @@
 <div class="relative flex h-screen items-center justify-center w-full bg-white">
   <div class="w-full max-w-sm p-6 flex flex-col justify-between h-full">
     <form
-      (ngSubmit)="onSubmit()"
       [formGroup]="newPasswordForm"
+      (ngSubmit)="onSubmit()"
       class="flex flex-col justify-between h-full"
     >
       <div class="flex flex-col items-center justify-center grow">
@@ -19,12 +19,13 @@
             id="password"
             [type]="mostrarSenha ? 'text' : 'password'"
             formControlName="password"
+            placeholder="Nova senha (mínimo 8 caracteres)"
             class="placeholder-[#9E9E9E] mb-3 block w-full h-14 rounded-lg border border-[#AEC8D4] px-4 py-2 focus:outline-0 focus:border-[#19AA79]"
             [class.border-red-500]="
               newPasswordForm.get('password')?.invalid && newPasswordForm.get('password')?.touched
             "
-            placeholder="Nova senha (mínimo 8 caracteres)"
           />
+
           <button
             type="button"
             (click)="toggleSenha()"
@@ -38,28 +39,24 @@
           </button>
         </div>
 
-        <div
-          *ngIf="
-            newPasswordForm.get('password')?.invalid && newPasswordForm.get('password')?.touched
-          "
-          class="text-red-500 text-xs mb-2 -mt-2"
-        >
-          A senha deve ter no mínimo 8 caracteres
-        </div>
+        @if (newPasswordForm.get('password')?.invalid && newPasswordForm.get('password')?.touched) {
+          <div class="text-red-500 text-xs mb-2 -mt-2">A senha deve ter no mínimo 8 caracteres</div>
+        }
 
         <div class="relative w-full">
           <input
             id="confirmPassword"
             [type]="mostrarConfirmarSenha ? 'text' : 'password'"
             formControlName="confirmPassword"
+            placeholder="Confirme a nova senha"
             class="placeholder-[#9E9E9E] mb-3 block w-full h-14 rounded-lg border border-[#AEC8D4] px-4 py-2 focus:outline-0 focus:border-[#19AA79]"
             [class.border-red-500]="
+              newPasswordForm.get('confirmPassword')?.touched &&
               newPasswordForm.get('confirmPassword')?.value !==
-                newPasswordForm.get('password')?.value &&
-              newPasswordForm.get('confirmPassword')?.touched
+                newPasswordForm.get('password')?.value
             "
-            placeholder="Confirme a nova senha"
           />
+
           <button
             type="button"
             (click)="toggleConfirmarSenha()"
@@ -75,20 +72,20 @@
           </button>
         </div>
 
-        <div
-          *ngIf="
-            newPasswordForm.get('confirmPassword')?.value !==
-              newPasswordForm.get('password')?.value &&
-            newPasswordForm.get('confirmPassword')?.touched
-          "
-          class="text-red-500 text-xs mb-2 -mt-2"
-        >
-          As senhas não coincidem
-        </div>
+        @if (
+          newPasswordForm.get('confirmPassword')?.touched &&
+          newPasswordForm.get('confirmPassword')?.value !== newPasswordForm.get('password')?.value
+        ) {
+          <div class="text-red-500 text-xs mb-2 -mt-2">As senhas não coincidem</div>
+        }
 
-        <div *ngIf="errorMessage" class="mb-3 p-3 bg-red-50 border border-red-200 rounded-lg">
-          <p class="text-red-600 text-sm">{{ errorMessage }}</p>
-        </div>
+        @if (errorMessage) {
+          <div class="mb-3 p-3 bg-red-50 border border-red-200 rounded-lg">
+            <p class="text-red-600 text-sm">
+              {{ errorMessage }}
+            </p>
+          </div>
+        }
 
         <button
           type="submit"

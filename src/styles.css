@@ -1,8 +1,16 @@
 @import 'tailwindcss';
 
+* {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+
+
 html,
 body {
   height: 100%;
+  overflow-x: hidden;
 }
 
 body {
@@ -47,4 +55,36 @@ body {
 
 .icone-reports {
   @apply object-contain scale-160;
+}
+
+/* Chat bubble wrapping fixes */
+.wrap-break-words {
+  /* preserve existing line breaks but allow wrapping so long text doesn't force horizontal scroll */
+  white-space: pre-wrap;
+  /* allow long words/URLs to break across lines when needed */
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  max-width: 100%;
+}
+
+/* Ensure child elements don't exceed the bubble width */
+.wrap-break-words * {
+  max-width: 100%;
+}
+
+/* For code/pre blocks, keep formatting but allow internal horizontal scroll inside the bubble */
+.wrap-break-words pre {
+  white-space: pre;
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+/* Specific bubble width rules */
+.user-bubble {
+  /* keep it responsive but restrict max width to force earlier wrapping */
+  max-width: min(50%, 360px);
+}
+
+.bot-bubble {
+  max-width: min(75%, 640px);
 }

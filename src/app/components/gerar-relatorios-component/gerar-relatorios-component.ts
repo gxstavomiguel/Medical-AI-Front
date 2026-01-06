@@ -13,18 +13,18 @@ import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'app-gerar-relatorios-component',
-  imports: [MatRadioModule,
+  imports: [
+    MatRadioModule,
     CommonModule,
     FormsModule,
     MatRadioModule,
     MatSelectModule,
-    MatInputModule
+    MatInputModule,
   ],
   standalone: true,
-  templateUrl: './gerar-relatorios-component.html'
+  templateUrl: './gerar-relatorios-component.html',
 })
 export class GerarRelatoriosComponent implements OnInit {
-
   reports: ReportHistory[] = [];
   reportGenerated = false;
 
@@ -36,7 +36,7 @@ export class GerarRelatoriosComponent implements OnInit {
     period: '',
     groupBy: '',
     reportType: '',
-    viewType: '' as 'graph' | 'table' | ''
+    viewType: '' as 'graph' | 'table' | '',
   };
 
   renderedViewType: 'graph' | 'table' | null = null;
@@ -47,7 +47,7 @@ export class GerarRelatoriosComponent implements OnInit {
     { key: '7d', label: 'Últimos 7 dias' },
     { key: '30d', label: 'Último mês' },
     { key: 'quarter', label: 'Último trimestre' },
-    { key: 'last_semester', label: 'Último semestre' }
+    { key: 'last_semester', label: 'Último semestre' },
   ];
 
   page = 1;
@@ -67,8 +67,8 @@ export class GerarRelatoriosComponent implements OnInit {
         id: '1',
         type: 'Crescimento de usuários',
         period: '16/06/2025 à 16/07/2025',
-        createdAt: '30/07/2025'
-      }
+        createdAt: '30/07/2025',
+      },
     ];
   }
 
@@ -87,14 +87,14 @@ export class GerarRelatoriosComponent implements OnInit {
 
     this.reportData = Array.from({ length: 10 }).map((_, i) => ({
       date: `Dia ${i + 1}`,
-      value: Math.floor(Math.random() * 100)
+      value: Math.floor(Math.random() * 100),
     }));
 
     this.reports.unshift({
       id: crypto.randomUUID(),
       type: this.getReportTitle(),
       period: 'Período selecionado',
-      createdAt: new Date().toLocaleDateString()
+      createdAt: new Date().toLocaleDateString(),
     });
 
     this.destroyChart();
@@ -125,19 +125,18 @@ export class GerarRelatoriosComponent implements OnInit {
     this.chart = new Chart(ctx, {
       type: 'line',
       data: {
-        labels: this.reportData.map(d => d.date),
+        labels: this.reportData.map((d) => d.date),
         datasets: [
           {
             label: 'Valores',
-            data: this.reportData.map(d => d.value),
+            data: this.reportData.map((d) => d.value),
             borderColor: '#19AA79',
-            backgroundColor: 'rgba(25,170,121,0.3)'
-          }
-        ]
-      }
+            backgroundColor: 'rgba(25,170,121,0.3)',
+          },
+        ],
+      },
     });
   }
-
 
   exportPDF() {
     const pdf = new jsPDF();
@@ -151,21 +150,14 @@ export class GerarRelatoriosComponent implements OnInit {
     XLSX.writeFile(workbook, 'relatorio.xlsx');
   }
 
-  viewReport(id: string): void {
-    console.log('Visualizar relatório:', id);
-  }
-
-
+  viewReport(id: string): void {}
 
   get pagedReports() {
     const start = (this.page - 1) * this.pageSize;
     return this.reports.slice(start, start + this.pageSize);
   }
 
+  prevPage() {}
 
-  prevPage() { }
-
-  nextPage() { }
-
+  nextPage() {}
 }
-

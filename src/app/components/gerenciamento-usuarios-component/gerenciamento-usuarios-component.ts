@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
-// Interfaces de dados simulados
 interface Usuario {
   codigo: string;
   nome: string;
@@ -29,7 +28,6 @@ interface Turma {
   templateUrl: './gerenciamento-usuarios-component.html',
 })
 export class GerenciamentoUsuariosComponent implements OnInit {
-  // Mapear dados reais da API
   turmas: Turma[] = [
     {
       id: 1,
@@ -38,11 +36,39 @@ export class GerenciamentoUsuariosComponent implements OnInit {
       editandoNome: false,
       novoUsuario: false,
       usuarios: [
-        { codigo: '123456', nome: 'Teste', email: 'teste@teste.com', senha: '*****', situacao: 'Ativo', acoes: '' },
-        { codigo: '123456', nome: 'Teste', email: 'teste@teste.com', senha: '*****', situacao: 'Ativo', acoes: '' },
-        { codigo: '123456', nome: 'Teste', email: 'teste@teste.com', senha: '*****', situacao: 'Ativo', acoes: '' },
-        { codigo: '123456', nome: 'Teste', email: 'teste@teste.com', senha: '*****', situacao: 'Ativo', acoes: '' },
-      ]
+        {
+          codigo: '123456',
+          nome: 'Teste',
+          email: 'teste@teste.com',
+          senha: '*****',
+          situacao: 'Ativo',
+          acoes: '',
+        },
+        {
+          codigo: '123456',
+          nome: 'Teste',
+          email: 'teste@teste.com',
+          senha: '*****',
+          situacao: 'Ativo',
+          acoes: '',
+        },
+        {
+          codigo: '123456',
+          nome: 'Teste',
+          email: 'teste@teste.com',
+          senha: '*****',
+          situacao: 'Ativo',
+          acoes: '',
+        },
+        {
+          codigo: '123456',
+          nome: 'Teste',
+          email: 'teste@teste.com',
+          senha: '*****',
+          situacao: 'Ativo',
+          acoes: '',
+        },
+      ],
     },
     {
       id: 2,
@@ -51,10 +77,24 @@ export class GerenciamentoUsuariosComponent implements OnInit {
       editandoNome: false,
       novoUsuario: false,
       usuarios: [
-        { codigo: '123456', nome: 'Teste', email: 'teste@teste.com', senha: '*****', situacao: 'Ativo', acoes: '' },
-        { codigo: '123456', nome: 'Teste', email: 'teste@teste.com', senha: '*****', situacao: 'Ativo', acoes: '' },
-      ]
-    }
+        {
+          codigo: '123456',
+          nome: 'Teste',
+          email: 'teste@teste.com',
+          senha: '*****',
+          situacao: 'Ativo',
+          acoes: '',
+        },
+        {
+          codigo: '123456',
+          nome: 'Teste',
+          email: 'teste@teste.com',
+          senha: '*****',
+          situacao: 'Ativo',
+          acoes: '',
+        },
+      ],
+    },
   ];
 
   colunaOrdenacao: string = '';
@@ -81,7 +121,7 @@ export class GerenciamentoUsuariosComponent implements OnInit {
     nome: '',
     email: '',
     situacao: 'Ativo',
-    turmaId: 0
+    turmaId: 0,
   };
 
   editarUsuarioForm = {
@@ -89,12 +129,12 @@ export class GerenciamentoUsuariosComponent implements OnInit {
     nome: '',
     email: '',
     situacao: 'Ativo' as 'Ativo' | 'Inativo',
-    turmaId: 0
+    turmaId: 0,
   };
 
   dadosImportacao: any[] = [];
 
-  constructor() { }
+  constructor() {}
 
   ngOnInit(): void {
     this.novoUsuarioForm.turmaId = this.turmas[0]?.id || 0;
@@ -125,7 +165,6 @@ export class GerenciamentoUsuariosComponent implements OnInit {
     });
   }
 
-
   abrirModalNovaTurma(): void {
     this.novaTurmaNome = '';
     this.modalNovaTurmaAberto = true;
@@ -143,7 +182,7 @@ export class GerenciamentoUsuariosComponent implements OnInit {
         usuarios: [],
         expandida: true,
         editandoNome: false,
-        novoUsuario: false
+        novoUsuario: false,
       };
       this.turmas.push(novaTurma);
       this.fecharModalNovaTurma();
@@ -156,7 +195,7 @@ export class GerenciamentoUsuariosComponent implements OnInit {
       nome: '',
       email: '',
       situacao: 'Ativo',
-      turmaId: turmaId
+      turmaId: turmaId,
     };
     this.modalNovoUsuarioAberto = true;
   }
@@ -166,15 +205,20 @@ export class GerenciamentoUsuariosComponent implements OnInit {
   }
 
   salvarNovoUsuario(): void {
-    const turma = this.turmas.find(t => t.id === this.novoUsuarioForm.turmaId);
-    if (turma && this.novoUsuarioForm.codigo && this.novoUsuarioForm.nome && this.novoUsuarioForm.email) {
+    const turma = this.turmas.find((t) => t.id === this.novoUsuarioForm.turmaId);
+    if (
+      turma &&
+      this.novoUsuarioForm.codigo &&
+      this.novoUsuarioForm.nome &&
+      this.novoUsuarioForm.email
+    ) {
       const novoUsuario: Usuario = {
         codigo: this.novoUsuarioForm.codigo,
         nome: this.novoUsuarioForm.nome,
         email: this.novoUsuarioForm.email,
         senha: '*****',
         situacao: this.novoUsuarioForm.situacao as 'Ativo' | 'Inativo',
-        acoes: ''
+        acoes: '',
       };
       turma.usuarios.push(novoUsuario);
       this.fecharModalNovoUsuario();
@@ -207,7 +251,6 @@ export class GerenciamentoUsuariosComponent implements OnInit {
   }
 
   salvarImportacao(): void {
-    console.log('Usuários importados salvos:', this.dadosImportacao);
     this.fecharModalPreVisualizacao();
   }
 
@@ -234,38 +277,42 @@ export class GerenciamentoUsuariosComponent implements OnInit {
   }
 
   excluirTurma(turmaId: number): void {
-    this.turmas = this.turmas.filter(t => t.id !== turmaId);
+    this.turmas = this.turmas.filter((t) => t.id !== turmaId);
   }
 
   get turmasFiltradas(): Turma[] {
     let turmas = this.turmas;
 
     if (this.filtroTurma) {
-      turmas = turmas.filter(t => t.nome === this.filtroTurma);
+      turmas = turmas.filter((t) => t.nome === this.filtroTurma);
     }
 
     if (this.filtroSituacao) {
-      turmas = turmas.map(turma => ({
-        ...turma,
-        usuarios: turma.usuarios.filter(u => u.situacao === this.filtroSituacao)
-      })).filter(t => t.usuarios.length > 0);
+      turmas = turmas
+        .map((turma) => ({
+          ...turma,
+          usuarios: turma.usuarios.filter((u) => u.situacao === this.filtroSituacao),
+        }))
+        .filter((t) => t.usuarios.length > 0);
     }
 
     if (this.termoBusca.trim()) {
       const termo = this.termoBusca.trim().toLowerCase();
-      turmas = turmas.map(turma => ({
-        ...turma,
-        usuarios: turma.usuarios.filter(u =>
-          u.nome.toLowerCase().includes(termo) || u.codigo.includes(termo)
-        )
-      })).filter(t => t.usuarios.length > 0);
+      turmas = turmas
+        .map((turma) => ({
+          ...turma,
+          usuarios: turma.usuarios.filter(
+            (u) => u.nome.toLowerCase().includes(termo) || u.codigo.includes(termo),
+          ),
+        }))
+        .filter((t) => t.usuarios.length > 0);
     }
 
     return turmas;
   }
 
   editarUsuario(usuario: Usuario): void {
-    const turma = this.turmas.find(t => t.usuarios.includes(usuario));
+    const turma = this.turmas.find((t) => t.usuarios.includes(usuario));
     if (turma) {
       this.usuarioParaEditar = usuario;
       this.turmaDoUsuarioEditado = turma;
@@ -274,7 +321,7 @@ export class GerenciamentoUsuariosComponent implements OnInit {
         nome: usuario.nome,
         email: usuario.email,
         situacao: usuario.situacao,
-        turmaId: turma.id
+        turmaId: turma.id,
       };
 
       this.modalEditarUsuarioAberto = true;
@@ -295,11 +342,11 @@ export class GerenciamentoUsuariosComponent implements OnInit {
       this.usuarioParaEditar.situacao = this.editarUsuarioForm.situacao;
 
       if (this.editarUsuarioForm.turmaId !== this.turmaDoUsuarioEditado.id) {
-        const novaTurma = this.turmas.find(t => t.id === this.editarUsuarioForm.turmaId);
+        const novaTurma = this.turmas.find((t) => t.id === this.editarUsuarioForm.turmaId);
 
         if (novaTurma) {
           this.turmaDoUsuarioEditado.usuarios = this.turmaDoUsuarioEditado.usuarios.filter(
-            u => u !== this.usuarioParaEditar
+            (u) => u !== this.usuarioParaEditar,
           );
 
           novaTurma.usuarios.push(this.usuarioParaEditar);
@@ -311,11 +358,10 @@ export class GerenciamentoUsuariosComponent implements OnInit {
   }
 
   excluirUsuario(turma: Turma, usuario: Usuario): void {
-    turma.usuarios = turma.usuarios.filter(u => u !== usuario);
-    console.log('Excluir usuário:', usuario);
+    turma.usuarios = turma.usuarios.filter((u) => u !== usuario);
   }
 
   get todasTurmas(): string[] {
-    return this.turmas.map(t => t.nome);
+    return this.turmas.map((t) => t.nome);
   }
 }

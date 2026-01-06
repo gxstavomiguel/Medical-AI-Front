@@ -16,13 +16,17 @@ export class LoginGuard implements CanActivate {
   constructor(
     private router: Router,
     private auth: AuthService,
-  ) { }
+  ) {}
 
   async canActivate(): Promise<boolean> {
     if (await this.auth.isLoggedIn()) {
-      this.router.navigate(['/home']);
-      return false;
+      const raw = localStorage.getItem('requires_password_change');
+      if (raw === 'false') {
+        this.router.navigate(['/home']);
+        return false;
+      }
     }
+
     return true;
   }
 }

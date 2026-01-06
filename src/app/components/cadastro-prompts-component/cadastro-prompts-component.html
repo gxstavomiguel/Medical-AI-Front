@@ -1,0 +1,322 @@
+<div class="w-full h-full p-2 sm:p-4">
+  <div class="flex justify-end items-center mb-4 sm:mb-6">
+    <button
+      (click)="addNewTheme()"
+      [ngClass]="[baseColor, baseColorHover]"
+      class="text-white font-bold py-2 px-3 sm:px-4 rounded flex items-center transition duration-150 ease-in-out text-sm sm:text-base"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-5 w-5 sm:h-5 sm:w-5 mr-2"
+        viewBox="0 0 20 20"
+        fill="currentColor"
+      >
+        <path
+          fill-rule="evenodd"
+          d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+          clip-rule="evenodd"
+        />
+      </svg>
+      Novo Tema
+    </button>
+  </div>
+
+  <div
+    class="p-3 sm:p-6 border mb border-gray-200 transition-all duration-200 min-h-[50vh] sm:min-h-[60vh] overflow-x-hidden"
+    [ngClass]="{
+      'flex items-center justify-center': promptSections.length === 0,
+    }"
+  >
+    @if (promptSections.length === 0) {
+      <p class="text-gray-500 text-center py-8 px-4 text-sm sm:text-base">
+        Nenhum tema cadastrado. Clique em <strong>"+ Novo Tema"</strong> para começar.
+      </p>
+    } @else {
+      @for (section of promptSections; track section.id) {
+        <app-prompt-section-item
+          [section]="section"
+          [baseColor]="baseColor"
+          [baseColorHover]="baseColorHover"
+          [parent]="null"
+          [isMobile]="isMobile"
+          (addChild)="addChildSection($event)"
+          (startEditName)="startEditName($event)"
+          (saveName)="saveName($event)"
+          (cancelEditName)="cancelEditName($event)"
+          (deleteSection)="deleteSection($event)"
+          (openPromptModal)="openPromptModal($event)"
+          (openRAGModal)="openRAGModal($event)"
+        ></app-prompt-section-item>
+      }
+    }
+  </div>
+
+  @if (isPromptModalOpen && currentSection) {
+    <div class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4">
+      <div
+        class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity"
+        (click)="closePromptModal()"
+      ></div>
+
+      <div
+        class="relative bg-white rounded-lg shadow-2xl w-full mx-3 sm:mx-auto sm:w-[95%] md:w-[85%] lg:w-[75%] xl:w-[65%] max-w-4xl h-[90vh] sm:h-auto sm:max-h-[85vh] transform transition-all overflow-hidden flex flex-col"
+      >
+        <div
+          class="p-3 sm:p-4 flex justify-between items-center bg-linear-to-r shrink-0"
+          [ngClass]="baseColor"
+        >
+          <h3
+            class="text-sm sm:text-lg md:text-xl font-bold text-white drop-shadow-sm pr-2 leading-tight"
+          >
+            Prompt: {{ currentSection.name }}
+          </h3>
+
+          <button
+            (click)="closePromptModal()"
+            class="text-white hover:text-gray-200 transition shrink-0 p-1"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-6 w-6 sm:h-7 sm:w-7"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+        </div>
+
+        <div class="p-3 sm:p-5 space-y-3 overflow-y-auto flex-1">
+          <div class="space-y-2">
+            <label for="prompt-content" class="block text-sm font-semibold text-gray-700">
+              Conteúdo do Prompt
+            </label>
+
+            <div
+              class="flex items-center justify-between px-3 py-2 rounded-md bg-gray-50 border border-gray-200"
+            >
+              <span class="text-xs sm:text-sm font-semibold text-gray-700"> Editor de Prompt </span>
+
+              <span class="text-xs text-gray-500">
+                {{ currentSection.newPromptContent.length || 0 }} caracteres
+              </span>
+            </div>
+
+            <div class="flex items-start gap-2 p-3 rounded-md bg-blue-50/50 border border-blue-100">
+              <div
+                class="flex items-center justify-center h-6 w-6 sm:h-7 sm:w-7 rounded-full bg-blue-100 shrink-0 mt-0.5"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-4 w-4 sm:h-4 sm:w-4 text-blue-600"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-4a1 1 0 00-.894.553l-.5 1a1 1 0 00.894 1.447h1a1 1 0 00.894-.553l.5-1A1 1 0 0010 6zm-1 5a1 1 0 000 2h1v3a1 1 0 102 0v-4a1 1 0 00-1-1H9z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+              </div>
+
+              <p class="text-xs sm:text-sm text-gray-700 leading-relaxed">
+                Este prompt define o comportamento da IA nesta seção. Seja específico e descreva o
+                tom esperado.
+              </p>
+            </div>
+
+            <textarea
+              id="prompt-content"
+              [(ngModel)]="currentSection.newPromptContent"
+              rows="8"
+              placeholder="Digite o prompt completo aqui..."
+              class="w-full p-3 border border-gray-300 rounded-md bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-[#19AA79] resize-none transition text-sm leading-relaxed font-mono min-h-[200px]"
+            >
+            </textarea>
+          </div>
+        </div>
+
+        <div
+          class="p-3 sm:p-4 flex justify-end gap-2 border-t border-gray-200 bg-gray-50/50 shrink-0"
+        >
+          <button
+            (click)="closePromptModal()"
+            class="px-4 py-2.5 text-gray-700 font-semibold text-sm bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition duration-150 shadow-sm"
+          >
+            Cancelar
+          </button>
+          <button
+            (click)="savePrompt()"
+            [ngClass]="[baseColor, baseColorHover]"
+            class="px-4 py-2.5 text-white font-semibold text-sm rounded-md transition duration-150 shadow-sm"
+          >
+            Salvar Prompt
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+
+  @if (isRAGModalOpen && currentSection) {
+    <div class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4">
+      <div
+        class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity"
+        (click)="closeRAGModal()"
+      ></div>
+
+      <div
+        class="relative bg-white rounded-lg shadow-2xl w-full mx-3 sm:mx-auto sm:w-[95%] md:w-[85%] lg:w-[75%] xl:w-[65%] max-w-4xl h-[90vh] sm:h-auto sm:max-h-[85vh] transform transition-all overflow-hidden flex flex-col"
+      >
+        <div
+          class="p-3 sm:p-4 flex justify-between items-center bg-linear-to-r shrink-0"
+          [ngClass]="baseColor"
+        >
+          <h3
+            class="text-sm sm:text-lg md:text-xl font-bold text-white drop-shadow-sm pr-2 leading-tight"
+          >
+            RAG: {{ currentSection.name }}
+          </h3>
+          <button
+            (click)="closeRAGModal()"
+            class="text-white hover:text-gray-200 transition shrink-0 p-1"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-6 w-6 sm:h-7 sm:w-7"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+        </div>
+
+        <div class="p-3 sm:p-5 space-y-4 overflow-y-auto flex-1">
+          <div
+            class="border-2 border-dashed border-gray-300 rounded-md p-6 sm:p-8 text-center hover:border-[#19AA79] hover:bg-gray-50/50 transition duration-150 bg-white"
+          >
+            <input
+              type="file"
+              id="rag-file-upload"
+              class="hidden"
+              (change)="onFileSelected($event)"
+              multiple
+            />
+            <label
+              for="rag-file-upload"
+              class="cursor-pointer flex flex-col items-center justify-center"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-10 w-10 sm:h-12 sm:w-12 text-gray-400"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="1.5"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                />
+              </svg>
+
+              <p class="mt-3 text-sm sm:text-base text-gray-600 font-medium">
+                Arraste arquivos aqui ou
+                <span class="font-bold text-[#19AA79]">clique para selecionar</span>
+              </p>
+              <p class="text-xs sm:text-sm text-gray-500 mt-1">PDF, DOCX, TXT, etc. (Máx. 10MB)</p>
+            </label>
+          </div>
+
+          <div class="space-y-2">
+            <h4 class="text-base sm:text-lg font-bold text-gray-800 border-b border-gray-200 pb-2">
+              Documentos Vinculados
+            </h4>
+            @if (currentSection.ragDocuments.length === 0) {
+              <p
+                class="text-gray-500 text-sm py-4 text-center bg-gray-50 rounded-md border border-gray-200"
+              >
+                Nenhum documento vinculado
+              </p>
+            } @else {
+              <div class="space-y-2">
+                @for (doc of currentSection.ragDocuments; track doc.id) {
+                  <div
+                    class="flex justify-between items-center p-3 border border-gray-200 rounded-md bg-white hover:bg-gray-50 transition"
+                  >
+                    <div class="flex items-center gap-2.5 min-w-0 flex-1">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="h-5 w-5 sm:h-6 sm:w-6 text-[#19AA79] shrink-0"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.414L16.586 7A2 2 0 0117 8.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm4 6a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1zm0 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"
+                          clip-rule="evenodd"
+                        />
+                      </svg>
+                      <span class="text-gray-700 font-medium text-sm sm:text-base truncate">{{
+                        doc.name
+                      }}</span>
+                    </div>
+                    <button
+                      (click)="deleteRAGDocument(doc)"
+                      class="text-red-500 hover:text-red-700 hover:bg-red-50 transition p-2 rounded-md shrink-0 ml-2"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="h-5 w-5 sm:h-5 sm:w-5"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                          clip-rule="evenodd"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        </div>
+
+        <div
+          class="p-3 sm:p-4 flex justify-end gap-2 border-t border-gray-200 bg-gray-50/50 shrink-0"
+        >
+          <button
+            (click)="closeRAGModal()"
+            class="px-4 py-2.5 text-gray-700 font-semibold text-sm bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition duration-150 shadow-sm"
+          >
+            Cancelar
+          </button>
+          <button
+            (click)="saveRAGFiles()"
+            [ngClass]="[baseColor, baseColorHover]"
+            class="px-4 py-2.5 text-white font-semibold text-sm rounded-md transition duration-150 shadow-sm"
+          >
+            Salvar Arquivos
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+</div>

@@ -28,8 +28,8 @@ export class NovaSenhaComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (!this.auth.requiresPasswordChange()) {
-      console.log('⚠️ Usuário não precisa trocar senha. Redirecionando...');
+    const raw = localStorage.getItem('requires_password_change');
+    if (raw === 'false') {
       this.router.navigate(['/home']);
     }
   }
@@ -57,10 +57,6 @@ export class NovaSenhaComponent implements OnInit {
 
     try {
       await this.auth.atualizarSenha(password);
-
-      localStorage.removeItem('requires_password_change');
-
-      this.router.navigate(['/home']);
     } catch (error: any) {
       console.error('Erro ao atualizar senha', error);
       this.errorMessage = error.message || 'Erro ao atualizar senha. Tente novamente.';
