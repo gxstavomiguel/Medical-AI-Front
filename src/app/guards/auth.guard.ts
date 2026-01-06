@@ -26,12 +26,16 @@ export const publicGuard: CanActivateFn = async () => {
     if (!data.session) {
       return true;
     } else {
-      router.navigate(['/home']);
-      return false;
+      const raw = localStorage.getItem('requires_password_change');
+      if (raw === 'false') {
+        router.navigate(['/home']);
+        return false;
+      }
+
+      return true;
     }
   } catch (error) {
     console.error('Erro ao obter sessão:', error);
     return true;
   }
 };
-

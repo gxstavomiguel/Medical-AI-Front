@@ -13,9 +13,9 @@ export const changePasswordGuard: CanActivateFn = async () => {
       return false;
     }
 
-    const requiresChange = localStorage.getItem('requires_password_change') === 'true';
+    const raw = localStorage.getItem('requires_password_change');
 
-    if (!requiresChange) {
+    if (raw === 'false') {
       router.navigate(['/home']);
       return false;
     }

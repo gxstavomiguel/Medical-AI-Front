@@ -1,13 +1,12 @@
 import { Routes } from '@angular/router';
-import { LoginComponent } from './pages/login-component/login-component';
-import { NovaSenhaComponent } from './pages/nova-senha-component/nova-senha-component';
-import { LoginGuard } from './guards/login.guard';
-import { DashboardComponent } from './pages/dashboard-component/dashboard-component';
-import { HomeComponent } from './pages/home-component/home-component';
-import { LayoutHomeComponent } from './components/layout-home-component/layout-home-component';
+import { LoginComponent } from './components/login-component/login-component';
+import { NovaSenhaComponent } from './components/nova-senha-component/nova-senha-component';
+import { HomeComponent } from './components/home-component/home-component';
 import { PainelControleComponent } from './components/painel-controle-component/painel-controle-component';
+import { HeaderComponent } from './components/header-component/header-component';
 import { authGuard, publicGuard } from './guards/auth.guard';
 import { changePasswordGuard } from './guards/change-password.guard';
+import { roleGuard } from './guards/role.guard';
 
 export const routes: Routes = [
   {
@@ -15,7 +14,6 @@ export const routes: Routes = [
     component: LoginComponent,
     canActivate: [publicGuard],
   },
-
   {
     path: 'nova-senha',
     component: NovaSenhaComponent,
@@ -23,52 +21,55 @@ export const routes: Routes = [
   },
 
   {
-    path: '',
-    component: LayoutHomeComponent,
+    path: 'home',
+    component: HomeComponent,
     canActivate: [authGuard],
-    children: [{ path: 'home', component: HomeComponent }],
   },
 
   {
     path: 'painel-controle',
-    component: PainelControleComponent,
-    canActivate: [authGuard],
+    component: HeaderComponent,
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['professor', 'admin'] },
     children: [
-      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-
+      {
+        path: '',
+        redirectTo: 'dashboard',
+        pathMatch: 'full',
+      },
       {
         path: 'dashboard',
         loadComponent: () =>
-          import('./pages/dashboard-component/dashboard-component').then(
+          import('./components/dashboard-component/dashboard-component').then(
             (m) => m.DashboardComponent,
           ),
       },
-
       {
         path: 'cadastro-prompts',
         loadComponent: () =>
-          import('./pages/cadastro-prompts-component/cadastro-prompts-component').then(
+          import('./components/cadastro-prompts-component/cadastro-prompts-component').then(
             (m) => m.CadastroPromptsComponent,
           ),
       },
-
       {
         path: 'gerenciamento-usuarios',
         loadComponent: () =>
-          import('./pages/gerenciamento-usuarios-component/gerenciamento-usuarios-component').then(
-            (m) => m.GerenciamentoUsuariosComponent,
-          ),
+          import(
+            './components/gerenciamento-usuarios-component/gerenciamento-usuarios-component'
+          ).then((m) => m.GerenciamentoUsuariosComponent),
       },
-
       {
         path: 'gerar-relatorios',
         loadComponent: () =>
-          import('./pages/gerar-relatorios-component/gerar-relatorios-component').then(
+          import('./components/gerar-relatorios-component/gerar-relatorios-component').then(
             (m) => m.GerarRelatoriosComponent,
           ),
       },
     ],
   },
 
-  { path: '**', redirectTo: '' },
+  {
+    path: '**',
+    redirectTo: '',
+  },
 ];
