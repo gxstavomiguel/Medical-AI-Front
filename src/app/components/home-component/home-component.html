@@ -193,39 +193,71 @@
                 ></textarea>
               </div>
 
-              <div class="flex items-center justify-end gap-2 px-3 pb-3 pt-1">
-                <button
-                  type="button"
-                  (click)="toggleGravacao()"
-                  class="w-9 h-9 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors"
-                  [class.bg-red-50]="gravando"
-                >
-                  <img
-                    src="assets/mic.png"
-                    alt="Microfone"
-                    class="w-5 h-5"
-                    [class.opacity-100]="gravando"
-                    [class.opacity-70]="!gravando"
-                  />
-                </button>
+              <div class="flex items-center justify-between gap-2 px-3 pb-3 pt-1">
+                <div>
+                  <button
+                    (click)="importarArquivo()"
+                    class="group px-4 py-2 rounded-lg bg-white text-gray-700 border border-gray-200 hover:border-[#19AA79] hover:bg-[#19AA79]/5 transition-all duration-200 ease-in-out shadow-sm hover:shadow-md font-medium text-sm flex items-center gap-2"
+                  >
+                    Adicionar arquivo
+                  </button>
+                </div>
 
-                <button
-                  type="button"
-                  (click)="enviarMensagem()"
-                  [disabled]="!newMessage.trim()"
-                  class="w-9 h-9 flex items-center justify-center rounded-full transition-all"
-                  [class.bg-gray-200]="!newMessage.trim()"
-                  [class.bg-black]="newMessage.trim()"
-                  [class.hover:bg-gray-800]="newMessage.trim()"
-                  [class.cursor-not-allowed]="!newMessage.trim()"
-                >
-                  <img
-                    src="assets/enviar.png"
-                    alt="Enviar"
-                    class="w-4 h-4 invert transition-opacity"
-                    [class.opacity-40]="!newMessage.trim()"
-                  />
-                </button>
+                <div class="flex items-center gap-2">
+                  <button
+                    type="button"
+                    (click)="toggleGravacao()"
+                    class="relative w-10 h-10 flex items-center justify-center rounded-full transition-all duration-300 ease-out shadow-md hover:shadow-lg group overflow-hidden"
+                    [class.bg-[#19AA79]]="!gravando"
+                    [class.hover:bg-[#15885f]]="!gravando"
+                    [class.bg-red-500]="gravando"
+                    [class.animate-pulse]="gravando"
+                  >
+                    <span
+                      *ngIf="gravando"
+                      class="absolute inset-0 rounded-full bg-red-400 animate-ping opacity-75"
+                    >
+                    </span>
+
+                    <img
+                      src="assets/mic.png"
+                      alt="Microfone"
+                      class="w-5 h-5 relative z-10 transition-all duration-300"
+                      [class.scale-110]="gravando"
+                      [class.brightness-0]="!gravando"
+                      [class.invert]="!gravando"
+                    />
+                  </button>
+
+                  <button
+                    type="button"
+                    (click)="enviarMensagem()"
+                    [disabled]="!newMessage.trim()"
+                    class="relative w-10 h-10 flex items-center justify-center rounded-full transition-all duration-300 ease-out shadow-md group overflow-hidden"
+                    [class.bg-[#19AA79]]="newMessage.trim()"
+                    [class.hover:bg-[#15885f]]="newMessage.trim()"
+                    [class.hover:shadow-lg]="newMessage.trim()"
+                    [class.hover:scale-105]="newMessage.trim()"
+                    [class.bg-gray-200]="!newMessage.trim()"
+                    [class.cursor-not-allowed]="!newMessage.trim()"
+                  >
+                    <span
+                      *ngIf="newMessage.trim()"
+                      class="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out"
+                    >
+                    </span>
+
+                    <img
+                      src="assets/enviar.png"
+                      alt="Enviar"
+                      class="w-4 h-4 relative z-10 transition-all duration-300"
+                      [class.brightness-0]="newMessage.trim()"
+                      [class.invert]="newMessage.trim()"
+                      [class.opacity-40]="!newMessage.trim()"
+                      [class.group-hover:translate-x-0.5]="newMessage.trim()"
+                    />
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -245,12 +277,12 @@
       class="fixed top-[60px] right-6 w-60 sm:w-64 bg-white rounded-lg shadow-2xl border border-gray-200 z-9999 overflow-hidden"
     >
       <div
-        class="px-4 py-3 bg-linear-to-r from-[#19AA79]/10 to-[#148b63]/10 border-b border-gray-200"
+        class="px-4 py-3 bg-gradient-to-r from-[#1AB394]/10 to-[#17a085]/10 border-b border-gray-200"
       >
         <div class="flex items-center gap-3">
           <img
             [src]="userInfo.avatar || 'assets/user.png'"
-            class="w-12 h-12 rounded-full border-2 border-white shadow-sm object-cover"
+            class="w-12 h-12 rounded-full border-2 border-[#1AB394] shadow-sm object-cover"
             [alt]="userInfo.name"
           />
           <div class="flex-1 min-w-0">
@@ -278,7 +310,7 @@
         @for (item of userMenuItems; track item.path) {
           <button
             (click)="navigateTo(item.path)"
-            class="w-full px-4 py-2.5 text-left text-sm text-gray-700 hover:bg-[#19AA79]/5 active:bg-gray-100 transition-colors"
+            class="w-full px-4 py-2.5 text-left text-sm text-gray-700 hover:bg-[#1AB394]/8 active:bg-[#1AB394]/15 transition-colors"
           >
             {{ item.label }}
           </button>
@@ -290,7 +322,7 @@
         <hr class="my-1 border-gray-200" />
         <button
           (click)="logout()"
-          class="w-full px-4 py-2.5 text-left text-sm text-red-600 hover:bg-red-50/50 active:bg-red-100 transition-colors font-medium"
+          class="w-full px-4 py-2.5 text-left text-sm text-red-600 hover:bg-red-50 active:bg-red-100 transition-colors font-medium"
         >
           Sair
         </button>

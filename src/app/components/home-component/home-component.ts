@@ -19,6 +19,7 @@ import { Router, RouterModule } from '@angular/router';
 import { menuConfig, MenuItem } from '../../interfaces/item-menu.interface';
 import { UserRole } from '../../interfaces/user-role.interface';
 import { MenuStateService } from '../../services/menu.service';
+import { HttpClient } from '@angular/common/http';
 
 interface Message {
   id?: string;
@@ -100,6 +101,7 @@ export class HomeComponent implements AfterViewChecked, OnInit {
     public sidebarService: SidebarService,
     private router: Router,
     public menuStateService: MenuStateService,
+    private http: HttpClient,
   ) {}
 
   protected firstMessage = true;
@@ -358,9 +360,10 @@ export class HomeComponent implements AfterViewChecked, OnInit {
   }
 
   getRoleBadgeColor(): string {
-    const role = this.userRole;
-    if (role === 'admin') return 'bg-red-500';
-    if (role === 'student') return 'bg-[#148b63]';
+    const role = this.userInfo.role;
+    if (role === 'admin') {
+      return 'bg-[#1AB394]';
+    }
     return 'bg-gray-500';
   }
 
@@ -376,5 +379,37 @@ export class HomeComponent implements AfterViewChecked, OnInit {
     if (novoNome && novoNome.trim() !== '') {
       this.chatService.renomearChat(chat.id, novoNome.trim());
     }
+  }
+
+  importarArquivo() {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.pdf,.doc,.docx,.txt,.png,.jpg,.jpeg';
+
+    input.onchange = (event: any) => {
+      const file = event.target.files[0];
+      if (file) {
+        this.uploadArquivo(file);
+      }
+    };
+
+    input.click();
+  }
+
+  uploadArquivo(file: File) {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    // Substitua pela sua URL de API
+    this.http.post('api/chat/upload', formData).subscribe({
+      next: (response) => {
+        console.log('Upload bem-sucedido', response);
+        // Adicionar arquivo ao chat ou fazer outra ação
+      },
+      error: (error) => {
+        console.error('Erro no upload', error);
+        alert('Erro ao importar arquivo');
+      },
+    });
   }
 }
